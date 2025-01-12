@@ -65,8 +65,12 @@
 </template>
 
 <script setup>
+import { icon } from '@fortawesome/fontawesome-svg-core';
 import simplebar from 'simplebar-vue';
 import 'simplebar-vue/dist/simplebar.min.css';
+
+const { useWebApp } = await import('vue-tg');
+const { initDataUnsafe } = useWebApp();
 
 const router = useRouter();
 const mode = ref('feed');
@@ -80,6 +84,7 @@ const feedContainer = ref(null);
 const imageRefs = ref([]);
 const showUI = ref(true);
 const tools = ref([]);
+const config = useRuntimeConfig().public;
 
 const toggleUI = event => {
     showUI.value = !showUI.value;
@@ -110,6 +115,10 @@ const handleToolClick = tool => {
             break;
         case 'view':
             router.push({ path: route.path, hash: '' });
+            break;
+        case 'link':
+            const link = `https://t.me/${config.BOT_ID}/start?startapp=${bookId}`;
+            navigator.clipboard.writeText(link);
             break;
     }
 };
@@ -224,7 +233,7 @@ const navigatePage = event => {
 
 onMounted(async () => {
     if (bookId === book.value?.id) return;
-    await bookStore.fetchBook(bookId, 404);
+    await bookStore.fetchBook(bookId, initDataUnsafe?.user?.id || 404);
 });
 
 const totalPages = computed(() => {
@@ -242,6 +251,7 @@ const currentBlock = computed(() => {
 watchEffect(() => {
     if (isOwner.value && route.hash === '#edit') {
         tools.value = [
+            { name: 'link', icon: 'link-45deg' },
             { name: 'image', icon: 'image' },
             { name: 'save', icon: 'floppy' },
             { name: 'view', icon: 'eye' },

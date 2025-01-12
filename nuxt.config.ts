@@ -7,6 +7,10 @@ export default defineNuxtConfig({
         MONGODB_URI: process.env.MONGODB_URI,
         GOOGLE_CLOUD_CREDENTIALS: process.env.GOOGLE_CLOUD_CREDENTIALS,
         GOOGLE_CLOUD_BUCKET_NAME: process.env.GOOGLE_CLOUD_BUCKET_NAME,
+        BOT_TOKEN: process.env.BOT_TOKEN,
+        public: {
+            BOT_ID: process.env.BOT_ID,
+        },
     },
 
     css: [
