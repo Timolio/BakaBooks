@@ -12,6 +12,8 @@
         v-if="book"
         @mousedown="onPageMouseDown($event)"
         @mouseup="onPageMouseUp($event)"
+        @touchstart="onPageMouseDown($event)"
+        @touchend="onPageMouseUp($event)"
     >
         <h2>{{ blockId }}</h2>
         <simplebar
