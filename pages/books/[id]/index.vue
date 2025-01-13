@@ -37,7 +37,10 @@
                     v-for="reaction in reactions[currentPage]"
                     v-if="currentPage === index + 1"
                     class="reaction-marker"
-                    :style="{ top: `${reaction.y}px`, left: `${reaction.x}px` }"
+                    :style="{
+                        left: `${(reaction.x / 100) * imageWidth}px`,
+                        top: `${(reaction.y / 100) * imageHeight}px`,
+                    }"
                 >
                     {{ reaction.type }}
                 </div>
@@ -62,7 +65,10 @@
             <div
                 v-for="reaction in reactions[String(currentPage)]"
                 class="reaction-marker"
-                :style="{ top: `${reaction.y}px`, left: `${reaction.x}px` }"
+                :style="{
+                    left: `${(reaction.x / 100) * imageWidth}px`,
+                    top: `${(reaction.y / 100) * imageHeight}px`,
+                }"
             >
                 {{ reaction.type }}
             </div>
@@ -152,18 +158,18 @@ const onPageClick = event => {
     let clientX, clientY;
 
     if (event.touches && event.touches.length > 0) {
-        clientX = event.touches[0].clientX; // Координаты касания по X
-        clientY = event.touches[0].clientY; // Координаты касания по Y
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
     } else {
-        clientX = event.clientX; // Координаты мыши по X
-        clientY = event.clientY; // Координаты мыши по Y
+        clientX = event.clientX;
+        clientY = event.clientY;
     }
 
     const element = document.getElementById(`${currentPage.value}`);
     const rect = element.getBoundingClientRect();
 
-    currentX.value = clientX - rect.left;
-    currentY.value = clientY - rect.top;
+    currentX.value = ((clientX - rect.left) / rect.width) * 100;
+    currentY.value = ((clientY - rect.top) / rect.height) * 100;
 
     pickerX.value = clientX;
     pickerY.value = clientY;
@@ -365,6 +371,13 @@ watch(currentPage, async () => {
     console.log(reactions.value);
 });
 
+const imageWidth = computed(() => {
+    return document.getElementById(`${currentPage.value}`).scrollWidth;
+});
+const imageHeight = computed(() => {
+    return document.getElementById(`${currentPage.value}`).scrollHeight;
+});
+
 watchEffect(() => {
     if (isOwner.value && route.hash === '#edit') {
         tools.value = [
@@ -378,7 +391,7 @@ watchEffect(() => {
             { name: 'feed', icon: 'view-list' },
             { name: 'book', icon: 'book' },
             isOwner.value && { name: 'edit', icon: 'pencil' },
-        ].filter(Boolean); // Убираем null значения из массива
+        ].filter(Boolean);
     }
 });
 </script>
