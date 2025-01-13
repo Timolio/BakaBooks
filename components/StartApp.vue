@@ -6,6 +6,9 @@ const { setHeaderColor, setBackgroundColor } = useWebAppTheme();
 
 onMounted(async () => {
     setHeaderColor('#111113');
+    setBackgroundColor('#111113');
+    disableVerticalSwipes();
+    expand();
 });
 </script>
 
