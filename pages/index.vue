@@ -11,8 +11,9 @@ onMounted(async () => {
             title: 'Draft',
             authorId: initDataUnsafe?.user?.id || 404,
         });
+        await navigateTo(`/books/${startApp}`);
+        return;
     }
-    await bookStore.fetchBook(startApp);
     await navigateTo(`/books/${startApp}`);
 });
 </script>
