@@ -150,14 +150,26 @@ const removeImage = index => {
 };
 
 const onPageClick = event => {
+    let clientX, clientY;
+
+    if (event.type.includes('touch')) {
+        const { touches, changedTouches } = e.originalEvent ?? e;
+        const touch = touches[0] ?? changedTouches[0];
+        clientX = touch.pageX;
+        clientY = touch.pageY;
+    } else if (event.type.includes('mouse')) {
+        clientX = event.clientX;
+        clientY = event.clientY;
+    }
+
     const element = document.getElementById(`${currentPage.value}`);
     const rect = element.getBoundingClientRect();
 
-    currentX.value = event.clientX - rect.left;
-    currentY.value = event.clientY - rect.top;
+    currentX.value = clientX - rect.left;
+    currentY.value = clientY - rect.top;
 
-    pickerX.value = event.clientX;
-    pickerY.value = event.clientY;
+    pickerX.value = clientX;
+    pickerY.value = clientY;
     showReactionPicker.value = true;
 };
 
