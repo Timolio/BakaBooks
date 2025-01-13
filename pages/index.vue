@@ -9,10 +9,6 @@ const route = useRoute();
 const bookStore = useBookStore();
 
 onMounted(async () => {
-    setBackgroundColor('#111113');
-    disableVerticalSwipes();
-    expand();
-    setHeaderColor('#111113');
     let startApp = initDataUnsafe?.start_param || route.query?.startapp;
     if (!startApp) {
         startApp = await bookStore.createBook({
