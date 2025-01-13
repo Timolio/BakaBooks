@@ -4,7 +4,7 @@
     </NuxtLayout>
 </template>
 
-<style>
+<!-- <style>
 :root {
     --tg-theme-accent-text-color: #6ab2f2;
     --tg-color-scheme: dark;
@@ -22,4 +22,4 @@
     --tg-theme-subtitle-text-color: #708499;
     --tg-theme-text-color: #f5f5f5;
 }
-</style>
+</style> -->
