@@ -1,12 +1,18 @@
 <script setup>
 import { useBookStore } from '~/stores/bookStore';
 
-const { useWebApp } = await import('vue-tg');
+const { useWebAppViewport, useWebAppTheme, useWebApp } = await import('vue-tg');
+const { disableVerticalSwipes, expand } = useWebAppViewport();
+const { setHeaderColor, setBackgroundColor } = useWebAppTheme();
 const { initDataUnsafe } = useWebApp();
 const route = useRoute();
 const bookStore = useBookStore();
 
 onMounted(async () => {
+    setBackgroundColor('#111113');
+    disableVerticalSwipes();
+    expand();
+    setHeaderColor('#111113');
     let startApp = initDataUnsafe?.start_param || route.query?.startapp;
     if (!startApp) {
         startApp = await bookStore.createBook({
