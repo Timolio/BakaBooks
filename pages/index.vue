@@ -1,9 +1,5 @@
 <script setup>
-import { useBookStore } from '~/stores/bookStore';
-
-const { useWebAppViewport, useWebAppTheme, useWebApp } = await import('vue-tg');
-const { disableVerticalSwipes, expand } = useWebAppViewport();
-const { setHeaderColor, setBackgroundColor } = useWebAppTheme();
+const { useWebApp } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
 const route = useRoute();
 const bookStore = useBookStore();

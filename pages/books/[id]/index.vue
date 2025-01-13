@@ -98,9 +98,7 @@
 import simplebar from 'simplebar-vue';
 import 'simplebar-vue/dist/simplebar.min.css';
 
-const { useWebAppViewport, useWebAppTheme, useWebApp } = await import('vue-tg');
-const { disableVerticalSwipes, expand } = useWebAppViewport();
-const { setHeaderColor, setBackgroundColor } = useWebAppTheme();
+const { useWebApp } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
 
 const router = useRouter();
@@ -138,11 +136,6 @@ const tools = ref([]);
 const longPressTimeout = ref(null);
 
 const fileInput = ref(null);
-
-setBackgroundColor('#111113');
-setHeaderColor('#111113');
-expand();
-disableVerticalSwipes();
 
 const getTop = el =>
     el.offsetTop + (el.offsetParent && getTop(el.offsetParent));

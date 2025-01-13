@@ -13,7 +13,7 @@ useHead({
     <main>
         <ClientOnly>
             <slot />
-            <!-- <StartApp /> -->
+            <StartApp />
         </ClientOnly>
     </main>
 </template>
