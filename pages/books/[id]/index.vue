@@ -98,9 +98,7 @@
 import simplebar from 'simplebar-vue';
 import 'simplebar-vue/dist/simplebar.min.css';
 
-const { useWebAppViewport, useWebAppTheme, useWebApp } = await import('vue-tg');
-const { disableVerticalSwipes, expand } = useWebAppViewport();
-const { setHeaderColor, setBackgroundColor } = useWebAppTheme();
+const { useWebApp } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
 
 const router = useRouter();
@@ -167,10 +165,6 @@ const setActiveBlock = async index => {
 };
 
 onMounted(async () => {
-    setBackgroundColor('#111113');
-    disableVerticalSwipes();
-    expand();
-    setHeaderColor('#111113');
     if (bookId !== book.value?.id) {
         await bookStore.fetchBook(bookId, initDataUnsafe?.user?.id || 404);
     }
