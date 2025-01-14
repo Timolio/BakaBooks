@@ -54,7 +54,7 @@ export const useChapterStore = defineStore('chapter', {
                 body: chapter,
             });
             this.currentTitleChapters.push(body);
-            this.currentTitleChapters = chapters.sort(
+            this.currentTitleChapters = this.currentTitleChapters.sort(
                 (a, b) => a.order - b.order
             );
             return body._id;

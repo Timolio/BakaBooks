@@ -51,6 +51,7 @@ h2 {
 
 .card {
     position: relative;
+    display: flex;
     background-color: #18181a;
     border-radius: 10px;
     word-wrap: break-word;
@@ -60,7 +61,7 @@ h2 {
     position: relative;
     display: inline-flex;
     padding: 0 12px;
-    background-color: #5177ff;
+    background-color: #3a995e;
     color: #fff;
     height: 28px;
     width: auto;
@@ -69,7 +70,7 @@ h2 {
     border-radius: 8px;
     font-size: 0.8rem;
     font-weight: 500;
-    border: 1px solid #5177ff;
+    border: 1px solid #3a995e;
 }
 
 p {
@@ -97,6 +98,14 @@ p {
     flex-direction: column;
 }
 
+.card-cover {
+    width: 80px;
+    height: 114px;
+    border-radius: 10px;
+    background-color: #1e1e20;
+    color: #f1f1f1;
+}
+
 .card-controls {
     display: flex;
     flex-direction: row;
@@ -105,6 +114,7 @@ p {
 }
 
 .card-title {
+    font-size: 1rem;
     color: #f1f1f1;
     overflow: hidden;
     font-weight: 500;

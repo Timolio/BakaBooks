@@ -19,7 +19,7 @@ onMounted(async () => {
         return;
     }
 
-    await navigateTo(`/titles/${data.titleId}/books/${data.chapterId}`);
+    await navigateTo(`/titles/${data.titleId}/chapters/${data.chapterId}`);
 });
 </script>
 

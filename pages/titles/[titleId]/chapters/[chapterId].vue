@@ -32,6 +32,8 @@
                         v-if="block.type === 'image'"
                         :src="block.value"
                         :id="index + 1"
+                        loading="lazy"
+                        decoding="async"
                     />
                     <button
                         v-if="isOwner && route.hash === '#edit'"
@@ -47,6 +49,8 @@
                     v-if="currentBlock"
                     :src="currentBlock.value"
                     :id="currentPage"
+                    loading="lazy"
+                    decoding="async"
                 />
                 <button
                     v-if="isOwner && route.hash === '#edit'"
