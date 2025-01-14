@@ -5,13 +5,9 @@ const route = useRoute();
 const bookStore = useBookStore();
 
 onMounted(async () => {
-    let startApp = initDataUnsafe?.start_param || route.query?.startapp;
+    const startApp = initDataUnsafe?.start_param || route.query?.startapp;
     if (!startApp) {
-        startApp = await bookStore.createBook({
-            title: 'Draft',
-            authorId: initDataUnsafe?.user?.id || 404,
-        });
-        await navigateTo(`/books/${startApp}`);
+        await navigateTo('/books');
         return;
     }
     await navigateTo(`/books/${startApp}`);

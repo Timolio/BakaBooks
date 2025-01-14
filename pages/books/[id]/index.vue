@@ -142,8 +142,8 @@ const getTop = el =>
 
 const setActiveBlock = async index => {
     const block = book.value.contentBlocks[index];
-    if (!reactionsMap.value[block._id])
-        await reactionStore.fetchReactions(bookId, block._id);
+    if (!reactionsMap.value[block?._id])
+        await reactionStore.fetchReactions(bookId, block?._id);
 
     let el;
     if (mode.value === 'feed') {
@@ -155,7 +155,7 @@ const setActiveBlock = async index => {
     if (!el) return;
     await nextTick(() => {
         activeBlockRect.value = {
-            reactions: reactionsMap.value[block._id],
+            reactions: reactionsMap.value[block?._id],
             x: el.offsetLeft,
             y: getTop(el),
             width: el.scrollWidth,
