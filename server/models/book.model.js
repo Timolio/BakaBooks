@@ -6,6 +6,8 @@ const contentBlockSchema = new mongoose.Schema({
 });
 
 const BookSchema = new mongoose.Schema({
+    titleId: { type: mongoose.Types.ObjectId, ref: 'Title', default: null },
+    order: { type: Number, default: null },
     title: { type: String, required: true },
     description: { type: String, default: '' },
     authorId: { type: Number, required: true },

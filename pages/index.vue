@@ -2,15 +2,23 @@
 const { useWebApp } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
 const route = useRoute();
-const bookStore = useBookStore();
 
 onMounted(async () => {
     const startApp = initDataUnsafe?.start_param || route.query?.startapp;
     if (!startApp) {
-        await navigateTo('/books');
+        await navigateTo('/dashboard');
         return;
     }
-    await navigateTo(`/books/${startApp}`);
+
+    const decodedJson = Buffer.from(startApp, 'base64').toString('utf-8');
+    const data = JSON.parse(decodedJson);
+
+    if (!data.titleId || !data.chapterId) {
+        await navigateTo('/dashboard');
+        return;
+    }
+
+    await navigateTo(`/titles/${data.titleId}/books/${data.chapterId}`);
 });
 </script>
 

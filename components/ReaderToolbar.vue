@@ -11,7 +11,9 @@
                 <button
                     class="toolbar-btn"
                     v-for="tool in tools"
+                    :class="{ disabled: tool.disabled }"
                     @click="$emit('tool-click', tool.name)"
+                    :disabled="tool.disabled"
                 >
                     <BootstrapIcon :name="tool.icon" />
                 </button>
@@ -98,6 +100,12 @@ defineEmits(['tool-click']);
     border: none;
     transition: color 0.2s;
     border-radius: 8px;
+}
+
+.toolbar-btn:disabled {
+    color: #6b6b6c;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .toolbar-btn:hover {

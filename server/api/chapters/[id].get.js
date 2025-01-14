@@ -1,10 +1,9 @@
-import { Reaction } from '~/server/models/reaction.model';
+import { Book } from '~/server/models/book.model';
 
 export default defineEventHandler(async event => {
-    const bookId = event.context.params.bookId;
-    const blockId = event.context.params.blockId;
+    const bookId = event.context.params.id;
 
-    if (!bookId || !blockId) {
+    if (!bookId) {
         throw createError({
             statusCode: 400,
             statusMessage: 'Bad Request',
@@ -12,8 +11,8 @@ export default defineEventHandler(async event => {
     }
 
     try {
-        const reactions = await Reaction.find({ bookId, blockId });
-        return reactions;
+        const book = await Book.findById(bookId);
+        return book;
     } catch (error) {
         throw createError({
             statusCode: 404,

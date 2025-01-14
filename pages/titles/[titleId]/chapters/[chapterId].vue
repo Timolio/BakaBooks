@@ -1,9 +1,9 @@
 <template>
     <!-- Шапка -->
-    <ReaderHeader :book="book" :showUI="showUI" />
+    <ReaderHeader :title="title" :book="currentChapter" :showUI="showUI" />
     <div
         id="reader"
-        v-if="book"
+        v-if="currentIndex !== -1"
         @mousedown="onPageMouseDown($event)"
         @mouseup="onPageMouseUp($event)"
         @touchstart="onPageMouseDown($event)"
@@ -24,7 +24,8 @@
             <div class="feed" v-if="mode === 'feed'">
                 <div
                     class="render-item"
-                    v-for="(block, index) in book.contentBlocks"
+                    v-for="(block, index) in currentTitleChapters[currentIndex]
+                        .contentBlocks"
                     :ref="el => (imageRefs[index] = el)"
                 >
                     <img
@@ -32,15 +33,6 @@
                         :src="block.value"
                         :id="index + 1"
                     />
-                    <!-- <ReactionMarker
-                        v-for="(reaction, rIndex) in getReactionsForBlock(
-                            block._id
-                        )"
-                        :key="rIndex"
-                        :reaction="reaction"
-                        :imageWidth="getImageWidth(index + 1)"
-                        :imageHeight="getImageHeight(index + 1)"
-                    /> -->
                     <button
                         v-if="isOwner && route.hash === '#edit'"
                         class="delete-button"
@@ -84,6 +76,11 @@
             style="display: none"
         />
     </div>
+    <ReaderSidebar
+        :show="showSidebar"
+        @close="showSidebar = false"
+        @tool-click="handleToolClick"
+    />
     <ReaderToolbar
         :show="showUI"
         :tools="tools"
@@ -107,10 +104,12 @@ const route = useRoute();
 const config = useRuntimeConfig().public;
 
 const mode = ref('feed');
-const bookId = route.params.id;
+const chapterId = route.params.chapterId;
+const titleId = route.params.titleId;
 
-const bookStore = useBookStore();
-const { book, isOwner } = storeToRefs(bookStore);
+const chapterStore = useChapterStore();
+const { isOwner, title, currentTitleChapters, currentIndex, currentChapter } =
+    storeToRefs(chapterStore);
 
 const reactionStore = useReactionStore();
 const { reactionsMap } = storeToRefs(reactionStore);
@@ -124,6 +123,7 @@ const showUI = ref(true);
 const showReactionPicker = ref(false);
 const showReactionOverlay = ref(false);
 const fullScreen = ref(false);
+const showSidebar = ref(false);
 
 const activeBlockRect = ref({ x: 0, y: 0, width: 0, height: 0 });
 
@@ -143,9 +143,10 @@ const getTop = el =>
     el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
 
 const setActiveBlock = async index => {
-    const block = book.value.contentBlocks[index];
-    if (!reactionsMap.value[block?._id])
-        await reactionStore.fetchReactions(bookId, block?._id);
+    const block = currentChapter.value.contentBlocks[index];
+    if (!reactionsMap.value[block?._id]) {
+        await reactionStore.fetchReactions(chapterId, block?._id);
+    }
 
     let el;
     if (mode.value === 'feed') {
@@ -167,21 +168,22 @@ const setActiveBlock = async index => {
 };
 
 onMounted(async () => {
-    if (bookId !== book.value?.id) {
-        await bookStore.fetchBook(bookId, initDataUnsafe?.user?.id || 404);
-    }
+    await chapterStore.fetchTitle(titleId, initDataUnsafe?.user?.id || 404);
+    await chapterStore.fetchFullChapter(chapterId);
     currentPage.value = 1;
 });
 
 const totalPages = computed(() => {
     return (
-        book.value?.contentBlocks?.filter(b => b.type === 'image').length || 0
+        currentChapter.value?.contentBlocks?.filter(b => b.type === 'image')
+            .length || 0
     );
 });
 
 const currentBlock = computed(() => {
     const imageBlocks =
-        book.value?.contentBlocks?.filter(b => b.type === 'image') || [];
+        currentChapter.value?.contentBlocks?.filter(b => b.type === 'image') ||
+        [];
     return imageBlocks[currentPage.value - 1] || null;
 });
 
@@ -198,9 +200,8 @@ watch(currentPage, async newVal => {
 ----------------------------- */
 async function onEmojiPick(emoji) {
     if (!blockId.value) return;
-
     const reaction = {
-        bookId,
+        chapterId,
         blockId: blockId.value,
         type: emoji,
         x: currentX.value,
@@ -342,22 +343,52 @@ watchEffect(() => {
         ];
     } else {
         tools.value = [
-            { name: 'feed', icon: 'view-list' },
-            { name: 'book', icon: 'book' },
-            { name: 'chat', icon: 'chat-heart' },
             {
-                name: 'fullscreen',
-                icon: fullScreen.value ? 'fullscreen-exit' : 'fullscreen',
+                name: 'prev',
+                icon: 'chevron-left',
+                disabled: currentIndex.value === 0,
             },
+            { name: 'settings', icon: 'gear' },
+            { name: 'chat', icon: 'chat-heart' },
             isOwner.value && { name: 'edit', icon: 'pencil' },
+            {
+                name: 'next',
+                icon: 'chevron-right',
+                disabled:
+                    currentIndex.value ===
+                    currentTitleChapters.value.length - 1,
+            },
         ].filter(Boolean);
     }
 });
 
-function handleToolClick(tool) {
+const moveChapter = async direction => {
+    const currentIndex = currentTitleChapters.value.findIndex(
+        b => b._id === currentChapter.value?._id
+    );
+    if (currentIndex === -1) return;
+
+    let newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+
+    if (newIndex >= 0 && newIndex < currentTitleChapters.value.length) {
+        const nextBook = currentTitleChapters.value[newIndex];
+        await navigateTo(`/titles/${title.value._id}/chapters/${nextBook._id}`);
+    }
+};
+
+const handleToolClick = async tool => {
     switch (tool) {
+        case 'settings':
+            showSidebar.value = !showSidebar.value;
+            break;
         case 'image':
             fileInput.value.click();
+            break;
+        case 'prev':
+            await moveChapter('prev');
+            break;
+        case 'next':
+            await moveChapter('next');
             break;
         case 'feed':
             switchMode('feed');
@@ -366,7 +397,7 @@ function handleToolClick(tool) {
             switchMode('book');
             break;
         case 'save':
-            bookStore.saveBook();
+            chapterStore.saveChapter();
             break;
         case 'edit':
             router.push({ path: route.path, hash: '#edit' });
@@ -375,22 +406,38 @@ function handleToolClick(tool) {
             router.push({ path: route.path, hash: '' });
             break;
         case 'link':
-            const link = `https://t.me/${config.BOT_ID}/start?startapp=${bookId}`;
+            const jsonString = JSON.stringify({
+                titleId: title.value._id,
+                chapterId: currentChapter.value._id,
+            });
+            const encoded = Buffer.from(jsonString).toString('base64');
+            const link = `https://t.me/${config.BOT_ID}/start?startapp=${encoded}`;
             navigator.clipboard.writeText(link);
             break;
         case 'chat':
             showReactionOverlay.value = !showReactionOverlay.value;
             break;
         case 'fullscreen':
+            const el = document.documentElement;
             if (fullScreen.value) {
                 fullScreen.value = false;
-                window.Telegram.WebApp.requestFullscreen();
+                if (initDataUnsafe?.user?.id) {
+                    window?.Telegram?.WebApp?.requestFullscreen();
+                    break;
+                }
+                document.exitFullscreen();
+                break;
             } else {
                 fullScreen.value = true;
-                window.Telegram.WebApp.exitFullscreen();
+                if (initDataUnsafe?.user?.id) {
+                    window?.Telegram?.WebApp?.exitFullscreen();
+                    break;
+                }
+                el.requestFullscreen();
+                break;
             }
     }
-}
+};
 
 function switchMode(newMode) {
     if (mode.value === newMode) return;
@@ -406,7 +453,7 @@ function switchMode(newMode) {
 ----------------------------- */
 function removeImage(index) {
     if (isOwner.value && route.hash === '#edit') {
-        book.value.contentBlocks.splice(index, 1);
+        currentChapter.value.contentBlocks.splice(index, 1);
     }
 }
 
@@ -415,7 +462,7 @@ function onFileSelected() {
     if (file) {
         uploadImage(file).then(imageUrl => {
             if (imageUrl) {
-                book.value.contentBlocks.push({
+                currentChapter.value.contentBlocks.push({
                     type: 'image',
                     value: imageUrl,
                 });

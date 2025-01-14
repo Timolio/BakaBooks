@@ -3,14 +3,7 @@ import { Book } from '~/server/models/book.model';
 export default defineEventHandler(async event => {
     const body = await readBody(event);
 
-    const { title, authorId } = body;
-
-    const newBook = new Book({
-        title,
-        description: '',
-        authorId,
-        contentBlocks: [],
-    });
+    const newBook = new Book(body);
 
     await newBook.save();
 

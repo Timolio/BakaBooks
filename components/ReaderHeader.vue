@@ -1,9 +1,9 @@
 <template>
     <div class="reader-header" :class="{ hidden: !showUI }">
         <div class="nav-reader">
-            <div class="nav-reader__caption" v-if="book">
-                <h2>{{ book.title }}</h2>
-                <p>{{ book.description }}</p>
+            <div class="nav-reader__caption" v-if="book && title">
+                <h2>{{ title.name }}</h2>
+                <p>{{ book.title }}</p>
             </div>
         </div>
     </div>
@@ -12,6 +12,10 @@
 <script setup>
 defineProps({
     book: {
+        type: Object,
+        default: null,
+    },
+    title: {
         type: Object,
         default: null,
     },
@@ -54,10 +58,6 @@ defineProps({
 }
 
 .nav-reader__caption p {
-    font-weight: 400;
-    margin-top: 2px;
     font-size: 0.75rem;
-    line-height: 110%;
-    color: #979798;
 }
 </style>

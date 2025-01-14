@@ -1,9 +1,10 @@
-import { Book } from '~/server/models/book.model';
+import { Title } from '~/server/models/title.model';
 
 export default defineEventHandler(async event => {
+    const titleId = event.context.params.id;
     const userId = Number(getHeader(event, 'x-user-id'));
 
-    if (!userId) {
+    if (!titleId) {
         throw createError({
             statusCode: 400,
             statusMessage: 'Bad Request',
@@ -11,9 +12,11 @@ export default defineEventHandler(async event => {
     }
 
     try {
-        const books = await Book.find({ authorId: userId });
-        console.log(books);
-        return books;
+        const title = await Title.findById(titleId);
+        return {
+            title,
+            isOwner: title.authorId === userId,
+        };
     } catch (error) {
         throw createError({
             statusCode: 404,
