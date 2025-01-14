@@ -15,7 +15,7 @@ const title = ref('');
 const config = useRuntimeConfig();
 
 const inviteBot = () => {
-    const rights = 'can_invite_users,can_manage_chat';
+    const rights = 'invite_users+manage_chat';
     const inviteLink = `https://t.me/${config.public.BOT_ID}?startchannel&admin=${rights}`;
     openTelegramLink(inviteLink);
 };

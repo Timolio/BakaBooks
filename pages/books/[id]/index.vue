@@ -95,6 +95,7 @@
 </template>
 
 <script setup>
+import { icon } from '@fortawesome/fontawesome-svg-core';
 import simplebar from 'simplebar-vue';
 import 'simplebar-vue/dist/simplebar.min.css';
 
@@ -122,6 +123,7 @@ const feedContainer = ref(null);
 const showUI = ref(true);
 const showReactionPicker = ref(false);
 const showReactionOverlay = ref(false);
+const fullScreen = ref(false);
 
 const activeBlockRect = ref({ x: 0, y: 0, width: 0, height: 0 });
 
@@ -343,6 +345,10 @@ watchEffect(() => {
             { name: 'feed', icon: 'view-list' },
             { name: 'book', icon: 'book' },
             { name: 'chat', icon: 'chat-heart' },
+            {
+                name: 'fullscreen',
+                icon: fullScreen.value ? 'fullscreen' : 'fullscreen-exit',
+            },
             isOwner.value && { name: 'edit', icon: 'pencil' },
         ].filter(Boolean);
     }
@@ -375,6 +381,14 @@ function handleToolClick(tool) {
         case 'chat':
             showReactionOverlay.value = !showReactionOverlay.value;
             break;
+        case 'fullscreen':
+            if (fullScreen.value) {
+                fullScreen.value = false;
+                window.Telegram.WebApp.requestFullscreen();
+            } else {
+                fullScreen.value = true;
+                window.Telegram.WebApp.exitFullscreen();
+            }
     }
 }
 
