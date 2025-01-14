@@ -347,7 +347,7 @@ watchEffect(() => {
             { name: 'chat', icon: 'chat-heart' },
             {
                 name: 'fullscreen',
-                icon: fullScreen.value ? 'fullscreen' : 'fullscreen-exit',
+                icon: fullScreen.value ? 'fullscreen-exit' : 'fullscreen',
             },
             isOwner.value && { name: 'edit', icon: 'pencil' },
         ].filter(Boolean);
