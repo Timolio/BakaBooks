@@ -1,6 +1,7 @@
 export const useReactionStore = defineStore('reactionStore', {
     state: () => ({
         reactionsMap: {},
+        currentIndex: -1,
     }),
     actions: {
         hasReactions(blockId) {

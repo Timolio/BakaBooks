@@ -91,6 +91,10 @@ p {
     cursor: pointer;
 }
 
+.simplebar-content {
+    margin-top: 48px;
+}
+
 .card-body {
     flex: auto;
     padding: 16px 10px 16px 16px;

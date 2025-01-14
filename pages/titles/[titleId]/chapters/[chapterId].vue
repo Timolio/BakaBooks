@@ -4,10 +4,7 @@
     <div
         id="reader"
         v-if="currentIndex !== -1"
-        @mousedown="onPageMouseDown($event)"
-        @mouseup="onPageMouseUp($event)"
-        @touchstart="onPageMouseDown($event)"
-        @touchend="onPageMouseUp($event)"
+        @click="onPageClick($event)"
         class="reader-wrapper"
     >
         <!-- Режим "лента" (feed) -->
@@ -64,7 +61,7 @@
 
         <!-- Пикер реакций -->
         <ReactionPicker
-            :show="showReactionPicker"
+            :show="showReactionPicker && showReactionOverlay"
             :pickerX="pickerX"
             :pickerY="pickerY"
             :emojis="emojis"
@@ -85,10 +82,13 @@
         @close="showSidebar = false"
         @tool-click="handleToolClick"
     />
+    <ReactionToolbar
+        @close="showReactionOverlay = false"
+        :show="showReactionOverlay"
+    />
     <ReaderToolbar
-        :show="showUI"
+        :show="showUI && !showReactionOverlay"
         :tools="tools"
-        style="transition: opacity 0.3s ease-in-out"
         :current="currentPage"
         :total="totalPages"
         @tool-click="handleToolClick"
@@ -228,15 +228,13 @@ function toggleUI() {
 /* -----------------------------
      Логика листания/тапов
 ----------------------------- */
-function onPageMouseDown(event) {
-    longPressTimeout.value = setTimeout(() => {
-        onLongPress(event);
-    }, 600);
-}
-function onPageMouseUp(event) {
+function onPageClick(event) {
     clearTimeout(longPressTimeout.value);
 
-    if (showReactionPicker.value) return;
+    if (showReactionOverlay.value) {
+        onLongPress(event);
+        return;
+    }
 
     const screenWidth = window.innerWidth;
     const thirdWidth = screenWidth / 3;
