@@ -53,6 +53,10 @@ export const useChapterStore = defineStore('chapter', {
                 method: 'POST',
                 body: chapter,
             });
+            this.currentTitleChapters.push(body);
+            this.currentTitleChapters = chapters.sort(
+                (a, b) => a.order - b.order
+            );
             return body._id;
         },
         async createTitle(title) {

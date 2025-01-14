@@ -1,4 +1,5 @@
 <script setup>
+import { Buffer } from 'buffer';
 const { useWebApp } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
 const route = useRoute();

@@ -92,9 +92,10 @@
 </template>
 
 <script setup>
-import { icon } from '@fortawesome/fontawesome-svg-core';
 import simplebar from 'simplebar-vue';
 import 'simplebar-vue/dist/simplebar.min.css';
+
+import { Buffer } from 'buffer';
 
 const { useWebApp } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
