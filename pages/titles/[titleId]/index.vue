@@ -22,20 +22,21 @@
                 </div>
             </div>
         </div>
-        <div class="creation">
+        <div class="creation" v-if="isOwner">
             <h2>Создать главу</h2>
             <input type="text" v-model="titleName" />
             <input type="number" v-model="number" />
             <button @click="createChapter">Создать главу</button>
         </div>
     </div>
+    <BackButton @click="goBack" />
 </template>
 
 <script setup>
-const { useWebApp } = await import('vue-tg');
+const { useWebApp, BackButton } = await import('vue-tg');
 const chapterStore = useChapterStore();
 const { initDataUnsafe } = useWebApp();
-const { currentTitleChapters, title } = storeToRefs(chapterStore);
+const { currentTitleChapters, title, isOwner } = storeToRefs(chapterStore);
 
 const route = useRoute();
 const titleId = route.params.titleId;
@@ -55,6 +56,10 @@ const createChapter = async () => {
 
 const openChapter = async chapterId => {
     await navigateTo(`/titles/${titleId}/chapters/${chapterId}`);
+};
+
+const goBack = async () => {
+    await navigateTo('/dashboard');
 };
 
 onMounted(async () => {

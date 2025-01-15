@@ -1,7 +1,11 @@
 <template>
     <div class="reader-header" :class="{ hidden: !showUI }">
         <div class="nav-reader">
-            <div class="nav-reader__caption" v-if="book && title">
+            <div
+                class="nav-reader__caption"
+                v-if="book && title"
+                @click="$emit('to-title')"
+            >
                 <h2>{{ title.name }}</h2>
                 <p>{{ book.title }}</p>
             </div>
@@ -24,6 +28,8 @@ defineProps({
         default: true,
     },
 });
+
+defineEmits(['to-title']);
 </script>
 
 <style scoped>
@@ -55,6 +61,7 @@ defineProps({
     display: flex;
     flex-direction: column;
     justify-content: center;
+    cursor: pointer;
 }
 
 .nav-reader__caption p {

@@ -8,10 +8,11 @@
         <h2>Создать команду</h2>
         <button @click="inviteBot">Создать команду</button>
     </div>
+    <BackButton @click="goBack" />
 </template>
 
 <script setup>
-const { useWebApp, useWebAppNavigation } = await import('vue-tg');
+const { useWebApp, useWebAppNavigation, BackButton } = await import('vue-tg');
 const { openTelegramLink } = useWebAppNavigation();
 const { initDataUnsafe } = useWebApp();
 
@@ -24,6 +25,10 @@ const inviteBot = () => {
     const rights = 'invite_users+manage_chat';
     const inviteLink = `https://t.me/${config.public.BOT_ID}?startchannel&admin=${rights}`;
     openTelegramLink(inviteLink);
+};
+
+const goBack = async () => {
+    await navigateTo('/dashboard');
 };
 
 const createTitle = async () => {

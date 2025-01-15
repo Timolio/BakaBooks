@@ -1,6 +1,11 @@
 <template>
     <!-- Шапка -->
-    <ReaderHeader :title="title" :book="currentChapter" :showUI="showUI" />
+    <ReaderHeader
+        @to-title="goToTitle"
+        :title="title"
+        :book="currentChapter"
+        :showUI="showUI"
+    />
     <div
         id="reader"
         v-if="currentIndex !== -1"
@@ -177,6 +182,10 @@ onMounted(async () => {
     await chapterStore.fetchFullChapter(chapterId);
     currentPage.value = 1;
 });
+
+const goToTitle = async () => {
+    await navigateTo(`/titles/${title.value._id}`);
+};
 
 const totalPages = computed(() => {
     return (
