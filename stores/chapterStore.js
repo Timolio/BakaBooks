@@ -1,13 +1,16 @@
 export const useChapterStore = defineStore('chapter', {
     state: () => ({
         title: null,
-        titles: [],
+        titles: null,
         isOwner: false,
-        currentTitleChapters: [],
+        currentTitleChapters: null,
         currentIndex: -1,
     }),
     getters: {
-        currentChapter: state => state.currentTitleChapters[state.currentIndex],
+        currentChapter: state => {
+            if (state.currentIndex <= -1) return;
+            return state.currentTitleChapters[state.currentIndex];
+        },
     },
     actions: {
         async fetchFullChapter(chapterId, userId) {

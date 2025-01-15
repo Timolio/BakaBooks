@@ -27,7 +27,7 @@ const enterApp = async () => {
     <div id="dashboard">
         <div class="list-message">
             <div class="list-icon">
-                <img src="/img/undergoing-icon.png" />
+                <img src="/img/undergoing-icon.png" style="height: 180px" />
             </div>
             <p>
                 Приложение находися в активной разработке и может содержать

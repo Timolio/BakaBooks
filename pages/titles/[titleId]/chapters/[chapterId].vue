@@ -12,6 +12,7 @@
         @click="onPageClick($event)"
         class="reader-wrapper"
     >
+        <Loading :show="currentChapter?.contentBlocks === undefined" />
         <!-- Режим "лента" (feed) -->
         <simplebar
             ref="feedContainer"
@@ -23,11 +24,14 @@
                 :show="showReactionOverlay"
                 :active-block-rect="activeBlockRect"
             />
-            <div class="feed" v-if="mode === 'feed'">
+
+            <div
+                class="feed"
+                v-if="mode === 'feed' && currentChapter?.contentBlocks"
+            >
                 <div
                     class="render-item"
-                    v-for="(block, index) in currentTitleChapters[currentIndex]
-                        .contentBlocks"
+                    v-for="(block, index) in currentChapter?.contentBlocks"
                     :ref="el => (imageRefs[index] = el)"
                 >
                     <img
@@ -46,7 +50,11 @@
                     </button>
                 </div>
             </div>
-            <div class="book" v-else-if="mode === 'book'" ref="currentImageRef">
+            <div
+                class="book"
+                v-else-if="mode === 'book' && currentChapter?.contentBlocks"
+                ref="currentImageRef"
+            >
                 <img
                     v-if="currentBlock"
                     :src="currentBlock.value"
@@ -153,7 +161,8 @@ const getTop = el =>
     el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
 
 const setActiveBlock = async index => {
-    const block = currentChapter.value.contentBlocks[index];
+    const block = currentChapter.value?.contentBlocks[index];
+    if (!block) return;
     if (!reactionsMap.value[block?._id]) {
         await reactionStore.fetchReactions(chapterId, block?._id);
     }
@@ -329,7 +338,7 @@ function scrollToPage(pageNumber, smooth = false) {
     if (mode.value === 'feed') {
         const targetElement = imageRefs.value[pageNumber - 1];
         if (targetElement && feedContainer.value) {
-            const scrollableElement = feedContainer.value.$el.querySelector(
+            const scrollableElement = feedContainer.value?.$el.querySelector(
                 '.simplebar-content-wrapper'
             );
             scrollableElement.scrollTo({
@@ -368,21 +377,21 @@ watchEffect(() => {
                 icon: 'chevron-right',
                 disabled:
                     currentIndex.value ===
-                    currentTitleChapters.value.length - 1,
+                    currentTitleChapters.value?.length - 1,
             },
         ].filter(Boolean);
     }
 });
 
 const moveChapter = async direction => {
-    const currentIndex = currentTitleChapters.value.findIndex(
+    const currentIndex = currentTitleChapters.value?.findIndex(
         b => b._id === currentChapter.value?._id
     );
     if (currentIndex === -1) return;
 
     let newIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
 
-    if (newIndex >= 0 && newIndex < currentTitleChapters.value.length) {
+    if (newIndex >= 0 && newIndex < currentTitleChapters.value?.length) {
         const nextBook = currentTitleChapters.value[newIndex];
         await navigateTo(`/titles/${title.value._id}/chapters/${nextBook._id}`);
     }
@@ -420,7 +429,7 @@ const handleToolClick = async tool => {
         case 'link':
             const jsonString = JSON.stringify({
                 titleId: title.value._id,
-                chapterId: currentChapter.value._id,
+                chapterId: currentChapter.value?._id,
             });
             const encoded = Buffer.from(jsonString).toString('base64');
             const link = `https://t.me/${config.BOT_ID}/start?startapp=${encoded}`;
@@ -465,7 +474,7 @@ function switchMode(newMode) {
 ----------------------------- */
 function removeImage(index) {
     if (isOwner.value && route.hash === '#edit') {
-        currentChapter.value.contentBlocks.splice(index, 1);
+        currentChapter.value?.contentBlocks.splice(index, 1);
     }
 }
 
@@ -474,7 +483,7 @@ function onFileSelected() {
     if (file) {
         uploadImage(file).then(imageUrl => {
             if (imageUrl) {
-                currentChapter.value.contentBlocks.push({
+                currentChapter.value?.contentBlocks.push({
                     type: 'image',
                     value: imageUrl,
                 });

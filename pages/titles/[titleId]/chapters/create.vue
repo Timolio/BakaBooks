@@ -1,5 +1,5 @@
 <template>
-    <div class="creation">
+    <div class="creation" v-if="isOwner">
         <h2>Создать главу</h2>
         <input type="text" v-model="titleName" />
         <input type="number" v-model="number" />
@@ -11,6 +11,7 @@
 <script setup>
 const { useWebApp, BackButton } = await import('vue-tg');
 const chapterStore = useChapterStore();
+const { isOwner } = storeToRefs(chapterStore);
 const { initDataUnsafe } = useWebApp();
 const titleName = ref('');
 const number = ref(0);

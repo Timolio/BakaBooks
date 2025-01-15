@@ -49,6 +49,7 @@ h2 {
 }
 
 .main-section {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -148,12 +149,7 @@ p {
     max-width: 400px;
 }
 
-.list-icon {
-    height: 200px;
-}
-
 .list-icon img {
-    height: 100%;
     width: auto;
 }
 
@@ -170,6 +166,7 @@ p {
     justify-content: center;
     border-bottom: 2px solid var(--accent-color);
     margin-left: 10px;
+    flex-shrink: 0;
 }
 
 .header {
@@ -201,6 +198,12 @@ p {
 .new-title-btn:hover {
     background-color: #18181a;
     color: #fff;
+}
+
+.new-title-btn:disabled {
+    color: #6b6b6c;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .new-title-btn .icon {

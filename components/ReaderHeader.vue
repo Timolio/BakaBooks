@@ -6,8 +6,8 @@
                 v-if="book && title"
                 @click="$emit('to-title')"
             >
-                <h2>{{ title.name }}</h2>
-                <p>{{ book.title }}</p>
+                <h2>{{ title?.name }}</h2>
+                <p>{{ book?.title }}</p>
             </div>
         </div>
     </div>

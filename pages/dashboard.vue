@@ -4,14 +4,19 @@
             <div class="section-title">
                 <h1>Ваши тайтлы</h1>
             </div>
-            <button @click="navigateTo('/titles/create')" class="new-title-btn">
+            <button
+                class="new-title-btn"
+                @click="navigateTo('/titles/create')"
+                :disabled="titles === null"
+            >
                 <span>Создать тайтл</span>
                 <BootstrapIcon class="icon" name="plus" />
             </button>
         </div>
 
         <div class="main-section">
-            <div class="list-items" v-if="titles.length > 0">
+            <Loading :show="titles === null" />
+            <div class="list-items" v-if="titles?.length > 0">
                 <div v-for="title in titles" class="card">
                     <div class="card-cover"></div>
                     <div class="card-body">
@@ -27,9 +32,9 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="list-message">
+            <div v-else-if="titles?.length === 0" class="list-message">
                 <div class="list-icon">
-                    <img src="/img/nothing-icon.png" />
+                    <img src="/img/nothing-icon.png" style="height: 200px" />
                 </div>
                 <p>Кажется, здесь пока пусто...</p>
             </div>
@@ -58,5 +63,17 @@ h1 {
     color: #f1f1f1;
     font-weight: 700;
     font-size: 1.2rem;
+}
+
+.site-icon {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.site-icon img {
+    height: 50px;
+    width: auto;
 }
 </style>

@@ -2,6 +2,7 @@
     <div id="error">
         <h2>{{ error?.statusCode }}</h2>
         <p>{{ error?.statusMessage }}</p>
+        {{ error }}
         <button @click="handleError">Clear errors</button>
     </div>
 </template>

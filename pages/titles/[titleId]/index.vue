@@ -1,5 +1,6 @@
 <template>
     <div id="dashboard">
+        <Loading :show="title === null && currentTitleChapters === null" />
         <div class="header" v-if="title">
             <div class="section-title">
                 <h1>{{ title.name }}</h1>
@@ -12,7 +13,7 @@
                 <BootstrapIcon class="icon" name="plus" />
             </button>
         </div>
-        <div class="main-section">
+        <div class="main-section" v-if="currentTitleChapters">
             <div v-for="chapter in currentTitleChapters" class="card">
                 <div class="card-body">
                     <div class="card-info">
