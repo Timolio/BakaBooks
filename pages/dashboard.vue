@@ -54,34 +54,6 @@ onMounted(async () => {
 </script>
 
 <style>
-.new-title-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #c4c4c5;
-    height: 34px;
-    width: auto;
-    background-color: transparent;
-    border: none;
-    font-weight: 500;
-    padding: 0 12px;
-    border-radius: 8px;
-    flex-shrink: 0;
-    font-size: 0.9rem;
-    gap: 6px;
-    cursor: pointer;
-    transition: background-color 0.4s, color 0.4s;
-}
-
-.new-title-btn:hover {
-    background-color: #18181a;
-    color: #fff;
-}
-
-.new-title-btn .icon {
-    font-size: 1.4rem;
-}
-
 h1 {
     color: #f1f1f1;
     font-weight: 700;
