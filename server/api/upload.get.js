@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Storage } from '@google-cloud/storage';
-import { version } from 'mongoose';
 
 const config = useRuntimeConfig();
 const credentials = JSON.parse(config.GOOGLE_CLOUD_CREDENTIALS);

@@ -1,14 +1,18 @@
 <template>
-    <div class="creation">
-        <h2>Создать тайтл</h2>
-        <input type="text" v-model="title" />
-        <button @click="createTitle">Создать тайтл</button>
+    <div id="dashboard">
+        <div class="header">
+            <div class="section-title">
+                <h1>Ваши тайтлы</h1>
+            </div>
+        </div>
+        <Field v-model="title" label="Название тайтла" />
+        <button @click="createTitle" class="card-btn">Создать тайтл</button>
+        <!-- <div class="field">
+            <h2>Создать команду</h2>
+            <button @click="inviteBot">Создать команду</button>
+        </div> -->
+        <BackButton @click="goBack" />
     </div>
-    <div class="creation">
-        <h2>Создать команду</h2>
-        <button @click="inviteBot">Создать команду</button>
-    </div>
-    <BackButton @click="goBack" />
 </template>
 
 <script setup>
@@ -40,4 +44,34 @@ const createTitle = async () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.field-label {
+    font-weight: 400;
+    color: #c4c4c5;
+    font-size: 0.9rem;
+    padding-bottom: 6px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-wrap {
+    height: 40px;
+    padding: 0 10px;
+    background-color: #1c1c1e;
+    border-radius: 8px;
+    border: 1px solid transparent;
+}
+
+.field-wrap input {
+    width: 100%;
+    height: 100%;
+    padding: 10px 0;
+    border: none;
+    font-weight: 400;
+    background-color: transparent;
+    outline: none;
+}
+</style>

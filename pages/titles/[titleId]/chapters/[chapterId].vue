@@ -434,7 +434,7 @@ const handleToolClick = async tool => {
             if (fullScreen.value) {
                 fullScreen.value = false;
                 if (initDataUnsafe?.user?.id) {
-                    window?.Telegram?.WebApp?.requestFullscreen();
+                    window?.Telegram?.WebApp?.exitFullscreen();
                     break;
                 }
                 document.exitFullscreen();
@@ -442,7 +442,7 @@ const handleToolClick = async tool => {
             } else {
                 fullScreen.value = true;
                 if (initDataUnsafe?.user?.id) {
-                    window?.Telegram?.WebApp?.exitFullscreen();
+                    window?.Telegram?.WebApp?.requestFullscreen();
                     break;
                 }
                 el.requestFullscreen();

@@ -1,7 +1,9 @@
 <template>
     <div id="dashboard">
         <div class="header" v-if="title">
-            <h1>{{ title.name }}</h1>
+            <div class="section-title">
+                <h1>{{ title.name }}</h1>
+            </div>
         </div>
         <div class="main-section">
             <div v-for="chapter in currentTitleChapters" class="card">
@@ -74,15 +76,6 @@ onMounted(async () => {
     justify-content: space-between;
     padding: 10px 16px 10px 16px;
     gap: 10px;
-}
-
-.header {
-    margin: 12px 13px;
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 2px solid #3a995e;
 }
 
 h1 {

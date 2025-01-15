@@ -54,26 +54,6 @@ onMounted(async () => {
 </script>
 
 <style>
-.section-title {
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 2px solid #3a995e;
-    margin-left: 10px;
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-}
-
-.creation {
-    margin-top: 12px;
-}
-
 .new-title-btn {
     display: inline-flex;
     align-items: center;
