@@ -42,11 +42,11 @@ defineProps({
 
 /* Остановка вращения и движение картинки */
 .run-leave-active .list-icon img {
-    animation: slide-out 0.8s ease-in-out forwards;
+    animation: slide-out 0.6s ease-in-out forwards;
 }
 
 .list-icon img {
-    animation: spin 1.2s linear infinite;
+    animation: spin 1s linear infinite;
 }
 
 .loading {
@@ -61,6 +61,10 @@ defineProps({
     justify-content: center;
     overflow: hidden;
     z-index: 5000;
+}
+
+p {
+    font-weight: 500;
 }
 
 @keyframes spin {

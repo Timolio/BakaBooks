@@ -1,9 +1,13 @@
 <template>
-    <div class="creation" v-if="isOwner">
-        <h2>Создать главу</h2>
-        <input type="text" v-model="titleName" />
-        <input type="number" v-model="number" />
-        <button @click="createChapter">Создать главу</button>
+    <div id="dashboard" v-if="isOwner">
+        <div class="header">
+            <div class="section-title">
+                <h1>Создание главы</h1>
+            </div>
+        </div>
+        <Field v-model="titleName" label="Название главы" />
+        <Field v-model="number" type="number" label="Номер главы" />
+        <button @click="createChapter" class="card-btn">Создать главу</button>
     </div>
     <BackButton @click="goBack" />
 </template>

@@ -2,7 +2,7 @@
     <div id="dashboard">
         <div class="header">
             <div class="section-title">
-                <h1>Ваши тайтлы</h1>
+                <h1>Создание тайтла</h1>
             </div>
         </div>
         <Field v-model="title" label="Название тайтла" />
@@ -11,8 +11,8 @@
             <h2>Создать команду</h2>
             <button @click="inviteBot">Создать команду</button>
         </div> -->
-        <BackButton @click="goBack" />
     </div>
+    <BackButton @click="goBack" />
 </template>
 
 <script setup>

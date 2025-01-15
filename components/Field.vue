@@ -3,7 +3,7 @@
         <label class="field-label">{{ label }}</label>
         <div class="field-wrap" :class="{ active: isFocused }">
             <input
-                type="text"
+                :type="type"
                 :value="modelValue"
                 @input="emit('update:modelValue', $event.target.value)"
                 @focus="isFocused = true"
@@ -20,6 +20,10 @@ import { ref } from 'vue';
 const props = defineProps({
     modelValue: String, // Двустороннее связывание
     label: String, // Текст для label
+    type: {
+        type: String,
+        default: 'text',
+    },
 });
 
 // Локальное состояние фокуса
