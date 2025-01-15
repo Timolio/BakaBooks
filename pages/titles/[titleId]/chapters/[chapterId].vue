@@ -59,15 +59,6 @@
             </div>
         </simplebar>
 
-        <!-- Пикер реакций -->
-        <ReactionPicker
-            :show="showReactionPicker && showReactionOverlay"
-            :pickerX="pickerX"
-            :pickerY="pickerY"
-            :emojis="emojis"
-            @pick="onEmojiPick"
-        />
-
         <!-- Hidden file input -->
         <input
             type="file"
@@ -77,6 +68,15 @@
             style="display: none"
         />
     </div>
+    <!-- Пикер реакций -->
+    <ReactionPicker
+        :show="showReactionPicker && showReactionOverlay"
+        :pickerX="pickerX"
+        :pickerY="pickerY"
+        :emojis="emojis"
+        @pick="onEmojiPick"
+    />
+
     <ReaderSidebar
         :show="showSidebar"
         @close="showSidebar = false"

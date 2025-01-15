@@ -47,6 +47,7 @@ h2 {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    height: 100%;
 }
 
 .card {
@@ -82,8 +83,11 @@ p {
 }
 
 #dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     overflow: auto;
-    padding: 0 20px;
+    padding: 0 16px;
     height: 100vh;
 }
 
@@ -123,4 +127,33 @@ p {
     overflow: hidden;
     font-weight: 500;
     line-height: 133%;
+}
+
+.list-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.list-message p {
+    font-size: 0.9rem;
+    text-align: center;
+    max-width: 400px;
+}
+
+.list-icon {
+    height: 200px;
+}
+
+.list-icon img {
+    height: 100%;
+    width: auto;
+}
+
+.list-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
