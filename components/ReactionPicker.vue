@@ -16,7 +16,7 @@ const props = defineProps({
         default: () => ['🔥', '😂', '😮', '😢', '❤️'],
     },
 });
-const emits = defineEmits(['pick']);
+const emit = defineEmits(['pick']);
 
 const pickerStyle = computed(() => ({
     position: 'absolute',
@@ -30,7 +30,7 @@ const pickerStyle = computed(() => ({
 }));
 
 function pick(emoji) {
-    emits('pick', emoji);
+    emit('pick', emoji);
 }
 </script>
 

@@ -12,7 +12,9 @@
         @click="onPageClick($event)"
         class="reader-wrapper"
     >
-        <Loading :show="currentChapter?.contentBlocks === undefined" />
+        <Loading
+            :show="currentChapter?.contentBlocks === undefined || uploading"
+        />
         <!-- Режим "лента" (feed) -->
         <simplebar
             ref="feedContainer"
@@ -71,15 +73,6 @@
                 </button>
             </div>
         </simplebar>
-
-        <!-- Hidden file input -->
-        <input
-            type="file"
-            ref="fileInput"
-            accept="image/*"
-            @change="onFileSelected"
-            style="display: none"
-        />
     </div>
     <!-- Пикер реакций -->
     <ReactionPicker
@@ -105,6 +98,11 @@
         :current="currentPage"
         :total="totalPages"
         @tool-click="handleToolClick"
+    />
+    <ImageUploader
+        ref="imageUploader"
+        @uploaded="upload"
+        @uploading="uploading = true"
     />
 </template>
 
@@ -155,7 +153,8 @@ const tools = ref([]);
 
 const longPressTimeout = ref(null);
 
-const fileInput = ref(null);
+const imageUploader = ref(null);
+const uploading = ref(false);
 
 const getTop = el =>
     el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
@@ -184,6 +183,17 @@ const setActiveBlock = async index => {
             height: el.scrollHeight,
         };
     });
+};
+
+const upload = imageUrl => {
+    if (imageUrl) {
+        const length = currentChapter.value?.contentBlocks.push({
+            type: 'image',
+            value: imageUrl,
+        });
+        scrollToPage(length - 1, true);
+    }
+    uploading.value = false;
 };
 
 onMounted(async () => {
@@ -403,7 +413,7 @@ const handleToolClick = async tool => {
             showSidebar.value = !showSidebar.value;
             break;
         case 'image':
-            fileInput.value.click();
+            imageUploader.value.trigger();
             break;
         case 'prev':
             await moveChapter('prev');
@@ -418,7 +428,7 @@ const handleToolClick = async tool => {
             switchMode('book');
             break;
         case 'save':
-            chapterStore.saveChapter();
+            await chapterStore.saveChapter();
             break;
         case 'edit':
             router.push({ path: route.path, hash: '#edit' });
@@ -476,36 +486,6 @@ function removeImage(index) {
     if (isOwner.value && route.hash === '#edit') {
         currentChapter.value?.contentBlocks.splice(index, 1);
     }
-}
-
-function onFileSelected() {
-    const file = fileInput.value.files[0];
-    if (file) {
-        uploadImage(file).then(imageUrl => {
-            if (imageUrl) {
-                currentChapter.value?.contentBlocks.push({
-                    type: 'image',
-                    value: imageUrl,
-                });
-            }
-        });
-    }
-}
-
-async function uploadImage(file) {
-    if (!file) return null;
-    // запрашиваем url для заливки
-    const { body } = await $fetch('/api/upload', {
-        headers: { 'Content-Type': file.type },
-    });
-    const { url, pub } = body;
-
-    await $fetch(url, {
-        method: 'PUT',
-        headers: { 'Content-Type': file.type },
-        body: file,
-    });
-    return pub;
 }
 </script>
 

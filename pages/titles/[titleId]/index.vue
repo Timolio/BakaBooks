@@ -14,20 +14,19 @@
             </button>
         </div>
         <div class="main-section" v-if="currentTitleChapters">
-            <div v-for="chapter in currentTitleChapters" class="card">
+            <div
+                v-for="chapter in currentTitleChapters"
+                class="card"
+                @click="openChapter(chapter._id)"
+            >
                 <div class="card-body">
                     <div class="card-info">
                         <p>{{ chapter.order }}</p>
                         <h3 class="card-title">{{ chapter.title }}</h3>
                     </div>
 
-                    <div class="card-controls">
-                        <button
-                            class="card-btn"
-                            @click="openChapter(chapter._id)"
-                        >
-                            Открыть
-                        </button>
+                    <div class="card-info">
+                        <p>{{ chapter.createdAt.split('T')[0] }}</p>
                     </div>
                 </div>
             </div>
@@ -55,6 +54,7 @@ const goBack = async () => {
 
 onMounted(async () => {
     await chapterStore.fetchTitle(titleId, initDataUnsafe?.user?.id || 404);
+    console.log(currentTitleChapters.value);
 });
 </script>
 
@@ -67,10 +67,24 @@ onMounted(async () => {
     gap: 10px;
 }
 
+.card {
+    cursor: pointer;
+}
+
+.card-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 h1 {
     color: #f1f1f1;
     font-weight: 500;
     font-size: 1.1rem;
+}
+
+h3 {
+    margin-top: 0 !important;
 }
 
 .creation {

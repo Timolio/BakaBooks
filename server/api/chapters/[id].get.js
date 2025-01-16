@@ -1,9 +1,9 @@
-import { Book } from '~/server/models/book.model';
+import { Chapter } from '~/server/models/chapter.model';
 
 export default defineEventHandler(async event => {
-    const bookId = event.context.params.id;
+    const chapterId = event.context.params.id;
 
-    if (!bookId) {
+    if (!chapterId) {
         throw createError({
             statusCode: 400,
             statusMessage: 'Bad Request',
@@ -11,8 +11,8 @@ export default defineEventHandler(async event => {
     }
 
     try {
-        const book = await Book.findById(bookId);
-        return book;
+        const chapter = await Chapter.findById(chapterId);
+        return chapter;
     } catch (error) {
         throw createError({
             statusCode: 404,

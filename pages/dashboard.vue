@@ -47,9 +47,13 @@ const { useWebApp } = await import('vue-tg');
 const chapterStore = useChapterStore();
 const { initDataUnsafe } = useWebApp();
 
-const { titles } = storeToRefs(chapterStore);
+const { titles, title, currentTitleChapters } = storeToRefs(chapterStore);
 
 const openTitle = async titleId => {
+    if (title.value?._id !== titleId) {
+        title.value = null;
+        currentTitleChapters.value = null;
+    }
     await navigateTo(`/titles/${titleId}`);
 };
 

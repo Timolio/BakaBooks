@@ -1,14 +1,14 @@
-import { Book } from '~/server/models/book.model';
+import { Chapter } from '~/server/models/chapter.model';
 
 export default defineEventHandler(async event => {
     const body = await readBody(event);
 
-    const newBook = new Book(body);
+    const newChapter = new Chapter(body);
 
-    await newBook.save();
+    await newChapter.save();
 
     return {
         statusCode: 201,
-        body: newBook,
+        body: newChapter,
     };
 });

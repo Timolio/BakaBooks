@@ -25,7 +25,7 @@ const props = defineProps({
     },
 });
 
-defineEmits(['close']);
+const emit = defineEmits(['close']);
 </script>
 
 <style scoped>

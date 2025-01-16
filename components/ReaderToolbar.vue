@@ -42,7 +42,7 @@ const props = defineProps({
     },
 });
 
-defineEmits(['tool-click']);
+const emit = defineEmits(['tool-click']);
 </script>
 
 <style scoped>

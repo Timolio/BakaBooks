@@ -1,4 +1,4 @@
-import { Book } from '~/server/models/book.model';
+import { Chapter } from '~/server/models/chapter.model';
 
 export default defineEventHandler(async event => {
     const titleId = event.context.params.id;
@@ -11,12 +11,11 @@ export default defineEventHandler(async event => {
     }
 
     try {
-        const books = await Book.find(
+        const chapters = await Chapter.find(
             { titleId },
-            { _id: true, title: true, order: true }
+            { _id: true, title: true, order: true, createdAt: true }
         );
-        console.log(books);
-        return books;
+        return chapters;
     } catch (error) {
         throw createError({
             statusCode: 404,

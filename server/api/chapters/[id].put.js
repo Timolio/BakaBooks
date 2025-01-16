@@ -1,10 +1,10 @@
-import { Book } from '~/server/models/book.model';
+import { Chapter } from '~/server/models/chapter.model';
 
 export default defineEventHandler(async event => {
     const body = await readBody(event);
 
     try {
-        await Book.findByIdAndUpdate(event.context.params.id, body);
+        await Chapter.findByIdAndUpdate(event.context.params.id, body);
         return {
             statusCode: 200,
             body,
@@ -13,7 +13,7 @@ export default defineEventHandler(async event => {
         return {
             statusCode: 404,
             body: {
-                message: 'Book not found',
+                message: 'Chapter not found',
             },
         };
     }

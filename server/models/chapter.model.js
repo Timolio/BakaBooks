@@ -5,14 +5,15 @@ const contentBlockSchema = new mongoose.Schema({
     value: { type: String, required: true },
 });
 
-const BookSchema = new mongoose.Schema({
+const ChapterSchema = new mongoose.Schema({
     titleId: { type: mongoose.Types.ObjectId, ref: 'Title', default: null },
     order: { type: Number, default: null },
     title: { type: String, required: true },
+    cover: { type: String, default: null },
     description: { type: String, default: '' },
     authorId: { type: Number, required: true },
     contentBlocks: [contentBlockSchema],
     createdAt: { type: Date, default: Date.now },
 });
 
-export const Book = mongoose.model('Book', BookSchema);
+export const Chapter = mongoose.model('Chapter', ChapterSchema);

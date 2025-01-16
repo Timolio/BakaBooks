@@ -1,18 +1,18 @@
-import { Book } from '~/server/models/book.model';
+import { Chapter } from '~/server/models/chapter.model';
 
 export default defineEventHandler(async event => {
-    const bookId = event.context.params.id;
+    const chapterId = event.context.params.id;
     const userId = Number(getHeader(event, 'x-user-id'));
 
-    if (!userId || !bookId) {
+    if (!userId || !chapterId) {
         throw createError({
             statusCode: 400,
             statusMessage: 'Bad Request',
         });
     }
 
-    const book = await Book.findById(bookId);
-    if (book.authorId !== userId) {
+    const chapter = await Chapter.findById(chapterId);
+    if (chapter.authorId !== userId) {
         throw createError({
             statusCode: 403,
             statusMessage: 'Forbidden',
@@ -20,7 +20,7 @@ export default defineEventHandler(async event => {
     }
 
     try {
-        await Book.findByIdAndDelete(bookId);
+        await Chapter.findByIdAndDelete(chapterId);
         return true;
     } catch (error) {
         throw createError({

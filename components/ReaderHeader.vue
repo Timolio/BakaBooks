@@ -29,7 +29,7 @@ defineProps({
     },
 });
 
-defineEmits(['to-title']);
+const emit = defineEmits(['to-title']);
 </script>
 
 <style scoped>
