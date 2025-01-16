@@ -18,7 +18,7 @@ import { ref } from 'vue';
 
 // Пропсы для передачи данных
 const props = defineProps({
-    modelValue, // Двустороннее связывание
+    modelValue: [String, Number], // Двустороннее связывание
     label: String, // Текст для label
     type: {
         type: String,

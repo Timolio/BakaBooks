@@ -69,6 +69,10 @@ h1 {
     font-size: 1.2rem;
 }
 
+.card-body {
+    justify-content: space-between;
+}
+
 .site-icon {
     width: 100%;
     display: flex;

@@ -54,7 +54,6 @@ const goBack = async () => {
 
 onMounted(async () => {
     await chapterStore.fetchTitle(titleId, initDataUnsafe?.user?.id || 404);
-    console.log(currentTitleChapters.value);
 });
 </script>
 
