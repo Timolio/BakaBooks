@@ -7,6 +7,7 @@ const ReactionSchema = new mongoose.Schema({
     x: { type: Number, required: true },
     y: { type: Number, required: true },
     authorId: { type: Number, required: true },
+    content: { type: String, default: '' },
     timestamp: { type: Date, default: Date.now },
 });
 

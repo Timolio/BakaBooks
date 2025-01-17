@@ -1,8 +1,11 @@
 <template>
-    <div v-if="show" class="reaction-picker" :style="pickerStyle">
-        <button v-for="emoji in emojis" :key="emoji" @click="pick(emoji)">
-            {{ emoji }}
-        </button>
+    <div
+        @click="console.log('hey')"
+        v-if="show"
+        class="reaction-picker"
+        :style="pickerStyle"
+    >
+        <img v-if="sample?.sticker" :src="'/img/' + sample?.sticker + '.png'" />
     </div>
 </template>
 
@@ -11,27 +14,18 @@ const props = defineProps({
     show: Boolean,
     pickerX: Number,
     pickerY: Number,
-    emojis: {
-        type: Array,
-        default: () => ['🔥', '😂', '😮', '😢', '❤️'],
-    },
+    sample: Object,
 });
 const emit = defineEmits(['pick']);
 
 const pickerStyle = computed(() => ({
     position: 'absolute',
+    transform: 'translate(-50%, -50%)',
     top: `${props.pickerY}px`,
     left: `${props.pickerX}px`,
-    background: 'white',
-    borderRadius: '8px',
-    padding: '10px',
-    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+    background: 'none',
     zIndex: 3000,
 }));
-
-function pick(emoji) {
-    emit('pick', emoji);
-}
 </script>
 
 <style scoped>
@@ -41,5 +35,11 @@ function pick(emoji) {
     font-size: 20px;
     cursor: pointer;
     margin-right: 6px;
+}
+
+.reaction-picker img {
+    display: block;
+    width: 72px;
+    height: auto;
 }
 </style>

@@ -17,6 +17,12 @@ body {
     overflow: hidden;
 }
 
+h1 {
+    color: #f1f1f1;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 0.4s ease-in-out;
@@ -208,4 +214,19 @@ p {
 
 .new-title-btn .icon {
     font-size: 1.4rem;
+}
+
+@keyframes spring {
+    0% {
+        transform: scale(0);
+    }
+    20% {
+        transform: scale(1.4);
+    }
+    50% {
+        transform: scale(0.9);
+    }
+    70% {
+        transform: scale(1);
+    }
 }

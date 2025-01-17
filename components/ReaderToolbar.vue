@@ -13,7 +13,7 @@
                     v-for="tool in tools"
                     :class="{ disabled: tool.disabled }"
                     @click="$emit('tool-click', tool.name)"
-                    :disabled="tool.disabled"
+                    :disabled="tool.disabled || disabled"
                 >
                     <BootstrapIcon :name="tool.icon" />
                 </button>
@@ -31,6 +31,10 @@ const props = defineProps({
     tools: {
         type: Array,
         default: () => [],
+    },
+    disabled: {
+        type: Boolean.app,
+        default: false,
     },
     current: {
         type: Number,

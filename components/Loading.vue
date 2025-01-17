@@ -13,7 +13,7 @@
 defineProps({
     show: {
         type: Boolean,
-        default: false,
+        default: true,
     },
 });
 </script>
@@ -46,7 +46,7 @@ defineProps({
 }
 
 .list-icon img {
-    animation: spin 1s linear infinite;
+    animation: spin 0.6s linear infinite;
 }
 
 .loading {

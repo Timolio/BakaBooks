@@ -6,15 +6,13 @@
         :book="currentChapter"
         :showUI="showUI"
     />
+    <Loading :show="currentChapter?.contentBlocks === undefined || uploading" />
     <div
         id="reader"
         v-if="currentIndex !== -1"
         @click="onPageClick($event)"
         class="reader-wrapper"
     >
-        <Loading
-            :show="currentChapter?.contentBlocks === undefined || uploading"
-        />
         <!-- Режим "лента" (feed) -->
         <simplebar
             ref="feedContainer"
@@ -23,8 +21,9 @@
             @scroll="onScroll"
         >
             <ReactionOverlay
-                :show="showReactionOverlay"
+                :show="true"
                 :active-block-rect="activeBlockRect"
+                @open="openReaction"
             />
 
             <div
@@ -76,11 +75,10 @@
     </div>
     <!-- Пикер реакций -->
     <ReactionPicker
-        :show="showReactionPicker && showReactionOverlay"
+        :show="showReactionOverlay"
         :pickerX="pickerX"
         :pickerY="pickerY"
-        :emojis="emojis"
-        @pick="onEmojiPick"
+        :sample="reactionSample"
     />
 
     <ReaderSidebar
@@ -88,15 +86,19 @@
         @close="showSidebar = false"
         @tool-click="handleToolClick"
     />
-    <ReactionToolbar
-        @close="showReactionOverlay = false"
+    <ReactionSidebar
+        @close="closeReactionSidebar"
         :show="showReactionOverlay"
+        v-model="reactionSample"
+        @created="handleReaction"
+        :comment="showComment"
     />
     <ReaderToolbar
         :show="showUI && !showReactionOverlay"
         :tools="tools"
         :current="currentPage"
         :total="totalPages"
+        :disabled="currentChapter?.contentBlocks === undefined || uploading"
         @tool-click="handleToolClick"
     />
     <ImageUploader
@@ -155,6 +157,16 @@ const longPressTimeout = ref(null);
 
 const imageUploader = ref(null);
 const uploading = ref(false);
+const reactionSample = ref({
+    sticker: null,
+    comment: null,
+});
+const showComment = ref(true);
+
+const closeReactionSidebar = () => {
+    showComment.value = false;
+    showReactionOverlay.value = false;
+};
 
 const getTop = el =>
     el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
@@ -196,7 +208,18 @@ const upload = imageUrl => {
     uploading.value = false;
 };
 
+const openReaction = reaction => {
+    reactionSample.value = reaction;
+    showComment.value = true;
+};
+
 onMounted(async () => {
+    // if (window.Adsgram) {
+    //     const AdController = window.Adsgram.init({
+    //         blockId: 'int-7194',
+    //     });
+    //     AdController.show();
+    // }
     await chapterStore.fetchTitle(titleId, initDataUnsafe?.user?.id || 404);
     await chapterStore.fetchFullChapter(chapterId);
     currentPage.value = 1;
@@ -231,17 +254,18 @@ watch(currentPage, async newVal => {
 /* -----------------------------
      Обработка добавления реакций
 ----------------------------- */
-async function onEmojiPick(emoji) {
+async function handleReaction(reaction) {
     if (!blockId.value) return;
-    const reaction = {
+    const newReaction = {
         chapterId,
         blockId: blockId.value,
-        type: emoji,
+        type: reaction.sticker,
+        content: reaction.comment,
         x: currentX.value,
         y: currentY.value,
         authorId: initDataUnsafe?.user?.id || 404,
     };
-    await reactionStore.addReaction(reaction);
+    await reactionStore.addReaction(newReaction);
 
     showReactionPicker.value = false;
 }
@@ -262,6 +286,13 @@ function onPageClick(event) {
     if (showReactionOverlay.value) {
         onLongPress(event);
         return;
+    }
+
+    const clickedElement = event.target;
+    console.log(clickedElement);
+    // Проверяем, кликнули ли по нужному объекту
+    if (clickedElement.classList.contains('.reaction-marker')) {
+        // Обрабатываем клик по объекту
     }
 
     const screenWidth = window.innerWidth;
@@ -532,6 +563,6 @@ img {
     object-fit: cover;
     display: block;
     user-select: none;
-    pointer-events: none;
+    pointer-events: auto;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div id="dashboard">
-        <Loading :show="title === null && currentTitleChapters === null" />
+        <Loading :show="title === null || currentTitleChapters === null" />
         <div class="header" v-if="title">
             <div class="section-title">
                 <h1>{{ title.name }}</h1>

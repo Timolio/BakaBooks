@@ -1,6 +1,6 @@
 <template>
     <div class="reaction-marker" :style="markerStyle">
-        {{ reaction.type }}
+        <img :src="'/img/' + reaction.type + '.png'" />
     </div>
 </template>
 
@@ -29,7 +29,6 @@ const markerStyle = computed(() => {
         left: `${leftPx}px`,
         top: `${topPx}px`,
         fontSize: '20px',
-        pointerEvents: 'none',
         userSelect: 'none',
         zIndex: 2000,
     };
@@ -42,7 +41,13 @@ const markerStyle = computed(() => {
     transform: translate(-50%, -50%);
     font-size: 20px;
     user-select: none;
-    pointer-events: none;
-    z-index: 2000;
+    pointer-events: auto;
+    z-index: 5000;
+}
+
+.reaction-marker img {
+    display: block;
+    width: 72px;
+    height: auto;
 }
 </style>

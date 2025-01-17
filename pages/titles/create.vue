@@ -7,29 +7,17 @@
         </div>
         <Field v-model="title" label="Название тайтла" />
         <button @click="createTitle" class="card-btn">Создать тайтл</button>
-        <!-- <div class="field">
-            <h2>Создать команду</h2>
-            <button @click="inviteBot">Создать команду</button>
-        </div> -->
     </div>
     <BackButton @click="goBack" />
 </template>
 
 <script setup>
-const { useWebApp, useWebAppNavigation, BackButton } = await import('vue-tg');
-const { openTelegramLink } = useWebAppNavigation();
+const { useWebApp, BackButton } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
 
 const chapterStore = useChapterStore();
 
 const title = ref('');
-const config = useRuntimeConfig();
-
-const inviteBot = () => {
-    const rights = 'invite_users+manage_chat';
-    const inviteLink = `https://t.me/${config.public.BOT_ID}?startchannel&admin=${rights}`;
-    openTelegramLink(inviteLink);
-};
 
 const goBack = async () => {
     await navigateTo('/dashboard');

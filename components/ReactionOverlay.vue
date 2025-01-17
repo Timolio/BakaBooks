@@ -7,6 +7,7 @@
                 :reaction="reaction"
                 :imageWidth="imageWidth"
                 :imageHeight="imageHeight"
+                @click.stop="openReaction(reaction)"
             />
         </div>
     </Transition>
@@ -21,6 +22,14 @@ const props = defineProps({
     show: Boolean,
 });
 
+const openReaction = reaction => {
+    const r = {
+        sticker: reaction.type,
+        comment: reaction.content,
+    };
+    emit('open', r);
+};
+
 const overlayStyle = computed(() => {
     return {
         position: 'absolute',
@@ -29,10 +38,11 @@ const overlayStyle = computed(() => {
         transform: `translate(${props.activeBlockRect.x}px, ${props.activeBlockRect.y}px)`,
         width: `${props.activeBlockRect.width}px`,
         height: `${props.activeBlockRect.height}px`,
-        pointerEvents: 'none', // важно, чтобы ловить клики
         zIndex: 2500,
     };
 });
+
+const emit = defineEmits(['open']);
 
 const imageWidth = computed(() => props.activeBlockRect.width);
 const imageHeight = computed(() => props.activeBlockRect.height);
@@ -40,6 +50,8 @@ const imageHeight = computed(() => props.activeBlockRect.height);
 
 <style scoped>
 .reaction-overlay {
+    pointer-events: auto;
     overflow: hidden;
+    z-index: 1000;
 }
 </style>

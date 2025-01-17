@@ -1,10 +1,10 @@
 <template>
-    <div class="reader-header" :class="{ hidden: !showUI }">
+    <div class="reader-header" :class="{ hidden: !showUI || !book || !title }">
         <div class="nav-reader">
             <div
                 class="nav-reader__caption"
-                v-if="book && title"
                 @click="$emit('to-title')"
+                v-if="book && title"
             >
                 <h2>{{ title?.name }}</h2>
                 <p>{{ book?.title }}</p>

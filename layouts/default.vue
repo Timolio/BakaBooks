@@ -5,6 +5,10 @@ useHead({
             src: 'https://telegram.org/js/telegram-web-app.js',
             defer: true,
         },
+        {
+            src: 'https://sad.adsgram.ai/js/sad.min.js',
+            async: true,
+        },
     ],
     meta: [
         {
