@@ -101,6 +101,7 @@ const next = event => {
         event.preventDefault();
         nextTick(() => {
             textarea.value?.focus();
+            textarea.value?.scrollIntoView({ block: 'end', inline: 'nearest' });
         });
     } else if (mode.value === 'textarea') {
         mode.value = 'sticker';
