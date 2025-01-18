@@ -1,56 +1,64 @@
 <template>
-    <Transition name="fade">
+    <div class="reaction-sidebar-wrapper">
+        <Transition name="fade">
+            <div
+                v-if="(show && mode !== 'sticker') || comment"
+                class="backdrop"
+                @click="closeSidebar"
+            ></div>
+        </Transition>
         <div
-            v-if="(show && mode !== 'sticker') || comment"
-            class="backdrop"
-            @click="closeSidebar"
-        ></div>
-    </Transition>
-    <div :class="{ open: show && mode === 'sidebar' }" class="reaction-sidebar">
-        <div class="reaction-sidebar__header">
-            <h3 class="caption">Реакции</h3>
-            <button class="close1-button" @click="closeSidebar">
-                <BootstrapIcon name="x-lg" />
-            </button>
-        </div>
-        <div class="reaction-sidebar__inner">
-            <button class="card-btn" @click="next($event)">Оставить</button>
-        </div>
-    </div>
-    <Transition name="fade">
-        <div class="nav-panel" v-if="(show && mode !== 'sidebar') || comment">
-            <div v-if="comment" class="comment">
-                {{ modelValue.comment }}
+            :class="{ open: show && mode === 'sidebar' }"
+            class="reaction-sidebar"
+        >
+            <div class="reaction-sidebar__header">
+                <h3 class="caption">Реакции</h3>
+                <button class="close1-button" @click="closeSidebar">
+                    <BootstrapIcon name="x-lg" />
+                </button>
             </div>
-            <div class="nav-panel__settings">
-                <textarea
-                    v-if="mode === 'textarea' && !comment"
-                    @input="reaction.comment = $event.target.value"
-                    ref="textarea"
-                    placeholder="Напишите что-нибудь... (необязательно)"
-                ></textarea>
-                <div class="nav-panel__stickers" v-if="mode === 'sticker'">
-                    <button @click="pickSticker('happy-fox')">
-                        <img class="sticker" src="/img/happy-fox.png" />
+            <div class="reaction-sidebar__inner">
+                <button class="card-btn" @click="next($event)">Оставить</button>
+            </div>
+        </div>
+        <Transition name="fade">
+            <div
+                class="nav-panel"
+                v-if="(show && mode !== 'sidebar') || comment"
+            >
+                <div v-if="comment" class="comment">
+                    {{ modelValue.comment }}
+                </div>
+                <div class="nav-panel__settings">
+                    <textarea
+                        v-if="mode === 'textarea' && !comment"
+                        @input="reaction.comment = $event.target.value"
+                        ref="textarea"
+                        placeholder="Напишите что-нибудь... (необязательно)"
+                    ></textarea>
+                    <div class="nav-panel__stickers" v-if="mode === 'sticker'">
+                        <button @click="pickSticker('happy-fox')">
+                            <img class="sticker" src="/img/happy-fox.png" />
+                        </button>
+                        <button @click="pickSticker('crybaby')">
+                            <img class="sticker" src="/img/crybaby.png" />
+                        </button>
+                        <button @click="pickSticker('shaky')">
+                            <img class="sticker" src="/img/shaky.png" />
+                        </button>
+                    </div>
+                </div>
+                <div v-if="!comment" class="nav-panel__controls">
+                    <button class="close2-button" @click="back">
+                        <BootstrapIcon name="x-lg" />
                     </button>
-                    <button @click="pickSticker('crybaby')">
-                        <img class="sticker" src="/img/crybaby.png" />
-                    </button>
-                    <button @click="pickSticker('shaky')">
-                        <img class="sticker" src="/img/shaky.png" />
+                    <button class="accept-button" @click="next">
+                        <BootstrapIcon name="check-lg" />
                     </button>
                 </div>
             </div>
-            <div v-if="!comment" class="nav-panel__controls">
-                <button class="close2-button" @click="back">
-                    <BootstrapIcon name="x-lg" />
-                </button>
-                <button class="accept-button" @click="next">
-                    <BootstrapIcon name="check-lg" />
-                </button>
-            </div>
-        </div>
-    </Transition>
+        </Transition>
+    </div>
 </template>
 
 <script setup>
@@ -117,6 +125,11 @@ const emit = defineEmits(['close', 'update:modelValue', 'created']);
 </script>
 
 <style scoped>
+.reaction-sidebar-wrapper {
+    position: fixed;
+    overflow-y: auto;
+}
+
 .nav-panel {
     position: fixed;
     bottom: 20px;
