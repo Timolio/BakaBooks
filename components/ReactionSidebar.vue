@@ -99,10 +99,9 @@ const next = event => {
     if (mode.value === 'sidebar') {
         mode.value = 'textarea';
         event.preventDefault();
-        nextTick(() => {
-            textarea.value?.focus();
-            textarea.value?.scrollIntoView({ block: 'end', inline: 'nearest' });
-        });
+        // nextTick(() => {
+        //     textarea.value?.focus();
+        // });
     } else if (mode.value === 'textarea') {
         mode.value = 'sticker';
     } else if (mode.value === 'sticker') {

@@ -17,10 +17,6 @@ body {
     overflow: hidden;
 }
 
-body.keyboard {
-    margin-bottom: 500px; /* add padding for keyboard */
-}
-
 h1 {
     color: #f1f1f1;
     font-weight: 700;
