@@ -161,7 +161,7 @@ const reactionSample = ref({
     sticker: null,
     comment: null,
 });
-const showComment = ref(true);
+const showComment = ref(false);
 
 const closeReactionSidebar = () => {
     showComment.value = false;

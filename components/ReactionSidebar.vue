@@ -69,7 +69,7 @@ const props = defineProps({
     },
     comment: {
         type: Boolean,
-        default: true,
+        default: false,
     },
 });
 
