@@ -36,6 +36,9 @@
                     <button @click="pickSticker('crybaby')">
                         <img class="sticker" src="/img/crybaby.png" />
                     </button>
+                    <button @click="pickSticker('shaky')">
+                        <img class="sticker" src="/img/shaky.png" />
+                    </button>
                 </div>
             </div>
             <div v-if="!comment" class="nav-panel__controls">
@@ -174,7 +177,7 @@ textarea {
 }
 
 .sticker {
-    width: 72px;
+    width: 64px;
     height: auto;
     animation: spring 1s ease-out forwards;
 }

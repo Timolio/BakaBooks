@@ -39,7 +39,7 @@ const pickerStyle = computed(() => ({
 
 .reaction-picker img {
     display: block;
-    width: 72px;
+    width: 80px;
     height: auto;
 }
 </style>
