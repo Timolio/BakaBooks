@@ -94,6 +94,7 @@
         v-model="reactionSample"
         @created="handleReaction"
         :comment="showComment"
+        :reactions="activeBlockRect"
     />
     <ReaderToolbar
         :show="showUI && !showReactionOverlay"

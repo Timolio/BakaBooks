@@ -1,6 +1,6 @@
 <template>
     <div class="reaction-marker" :style="markerStyle">
-        <img :src="'/img/' + reaction.type + '.png'" />
+        <img :style="markerImgStyle" :src="'/img/' + reaction.type + '.png'" />
     </div>
 </template>
 
@@ -20,12 +20,18 @@ const props = defineProps({
     },
 });
 
+const markerImgStyle = computed(() => {
+    const imgWidth = props.imageWidth * 0.15;
+    return {
+        width: `${imgWidth}px`,
+    };
+});
+
 const markerStyle = computed(() => {
     const leftPx = (props.reaction.x / 100) * props.imageWidth;
     const topPx = (props.reaction.y / 100) * props.imageHeight;
     return {
         position: 'absolute',
-        transform: 'translate(-50%, -50%)',
         left: `${leftPx}px`,
         top: `${topPx}px`,
         fontSize: '20px',
@@ -39,11 +45,12 @@ const markerStyle = computed(() => {
 .reaction-marker {
     pointer-events: auto;
     z-index: 5000;
+    transform: translate(-50%, -50%);
 }
 
 .reaction-marker img {
     display: block;
-    width: 64px;
     height: auto;
+    animation: spring 1s ease-out forwards;
 }
 </style>

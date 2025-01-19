@@ -8,10 +8,13 @@
         </div>
         <div class="reaction-sidebar__inner">
             <button class="card-btn" @click="next($event)">Оставить</button>
+            <p v-for="reaction in reactions.reactions">
+                {{ reaction.content }}
+            </p>
         </div>
     </div>
     <div
-        :class="{ upper: mode === 'textarea' }"
+        :class="{ upper: mode === 'textarea' || comment }"
         class="reaction-sidebar-wrapper"
         v-if="show || comment"
     >
@@ -106,6 +109,10 @@ const props = defineProps({
     comment: {
         type: Boolean,
         default: false,
+    },
+    reactions: {
+        type: Object,
+        default: {},
     },
 });
 
