@@ -151,11 +151,8 @@ const pickerX = ref(0);
 const pickerY = ref(0);
 const currentX = ref(0);
 const currentY = ref(0);
-const emojis = ref(['🔥', '😂', '😮', '😢', '❤️']);
 
 const tools = ref([]);
-
-const longPressTimeout = ref(null);
 
 const imageUploader = ref(null);
 const uploading = ref(false);
@@ -284,12 +281,7 @@ function toggleUI() {
      Логика листания/тапов
 ----------------------------- */
 function onPageClick(event) {
-    clearTimeout(longPressTimeout.value);
-
-    if (showReactionOverlay.value) {
-        onLongPress(event);
-        return;
-    }
+    if (showReactionOverlay.value) return;
 
     const screenWidth = window.innerWidth;
     const thirdWidth = screenWidth / 3;
@@ -307,6 +299,8 @@ function onPageClick(event) {
 }
 
 function onLongPress(event) {
+    console.log('aboba');
+    if (!showReactionOverlay.value) return;
     let clientX, clientY;
     if (event.touches && event.touches.length > 0) {
         clientX = event.touches[0].clientX;
@@ -326,6 +320,7 @@ function onLongPress(event) {
     pickerX.value = clientX;
     pickerY.value = clientY;
     showReactionPicker.value = true;
+    console.log(showReactionPicker.value, pickerX.value, pickerY.value);
 }
 
 /* -----------------------------

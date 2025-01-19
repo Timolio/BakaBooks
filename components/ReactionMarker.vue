@@ -37,10 +37,6 @@ const markerStyle = computed(() => {
 
 <style scoped>
 .reaction-marker {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-    user-select: none;
     pointer-events: auto;
     z-index: 5000;
 }

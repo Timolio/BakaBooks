@@ -39,6 +39,8 @@ const overlayStyle = computed(() => {
         width: `${props.activeBlockRect.width}px`,
         height: `${props.activeBlockRect.height}px`,
         zIndex: 2500,
+        overflow: 'hidden',
+        pointerEvents: 'auto',
     };
 });
 
@@ -47,11 +49,3 @@ const emit = defineEmits(['open']);
 const imageWidth = computed(() => props.activeBlockRect.width);
 const imageHeight = computed(() => props.activeBlockRect.height);
 </script>
-
-<style scoped>
-.reaction-overlay {
-    pointer-events: auto;
-    overflow: hidden;
-    z-index: 1000;
-}
-</style>
