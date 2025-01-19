@@ -110,7 +110,7 @@ const props = defineProps({
 });
 
 watch(
-    () => reaction,
+    () => reaction.value,
     newValue => {
         emit('update:modelValue', newValue);
     },
