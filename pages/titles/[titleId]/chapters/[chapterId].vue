@@ -209,6 +209,7 @@ const upload = imageUrl => {
 };
 
 const openReaction = reaction => {
+    if (showReactionOverlay.value) return;
     reactionSample.value = reaction;
     showComment.value = true;
 };
@@ -268,6 +269,7 @@ async function handleReaction(reaction) {
     await reactionStore.addReaction(newReaction);
 
     showReactionPicker.value = false;
+    showReactionOverlay.value = false;
 }
 
 /* -----------------------------
@@ -286,13 +288,6 @@ function onPageClick(event) {
     if (showReactionOverlay.value) {
         onLongPress(event);
         return;
-    }
-
-    const clickedElement = event.target;
-    console.log(clickedElement);
-    // Проверяем, кликнули ли по нужному объекту
-    if (clickedElement.classList.contains('.reaction-marker')) {
-        // Обрабатываем клик по объекту
     }
 
     const screenWidth = window.innerWidth;

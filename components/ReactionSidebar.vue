@@ -1,8 +1,8 @@
 <template>
-    <div class="reaction-sidebar-wrapper">
+    <div v-if="show || comment" class="reaction-sidebar-wrapper">
         <Transition name="fade">
             <div
-                v-if="(show && mode !== 'sticker') || comment"
+                v-if="mode !== 'sticker'"
                 class="backdrop"
                 @click="closeSidebar"
             ></div>
@@ -24,7 +24,8 @@
         <Transition name="fade">
             <div
                 class="nav-panel"
-                v-if="(show && mode !== 'sidebar') || comment"
+                :class="{ upper: mode === 'textarea' }"
+                v-if="mode !== 'sidebar' || comment"
             >
                 <div v-if="comment" class="comment">
                     {{ modelValue.comment }}
@@ -127,18 +128,25 @@ const emit = defineEmits(['close', 'update:modelValue', 'created']);
 <style scoped>
 .reaction-sidebar-wrapper {
     position: fixed;
+    z-index: 3000;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
     overflow-y: auto;
+    pointer-events: none;
 }
 
 .nav-panel {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    z-index: 2000;
+    z-index: 5000;
     background-color: #1c1c1e;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
+    scroll-margin-bottom: 200px;
 }
 
 .nav-panel__settings {
