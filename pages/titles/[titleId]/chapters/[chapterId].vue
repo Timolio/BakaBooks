@@ -320,7 +320,12 @@ function onLongPress(event) {
     pickerX.value = clientX;
     pickerY.value = clientY;
     showReactionPicker.value = true;
-    console.log(showReactionPicker.value, pickerX.value, pickerY.value);
+    console.log(
+        showReactionPicker.value,
+        pickerX.value,
+        pickerY.value,
+        reactionSample.value
+    );
 }
 
 /* -----------------------------

@@ -41,14 +41,38 @@
                         placeholder="Напишите что-нибудь... (необязательно)"
                     ></textarea>
                     <div class="nav-panel__stickers" v-if="mode === 'sticker'">
-                        <button @click="pickSticker('happy-fox')">
-                            <img class="sticker" src="/img/happy-fox.png" />
+                        <button
+                            class="sticker"
+                            :class="{
+                                active: reaction.sticker === 'happy-fox',
+                            }"
+                            @click="pickSticker('happy-fox')"
+                        >
+                            <div>
+                                <img src="/img/happy-fox.png" />
+                            </div>
                         </button>
-                        <button @click="pickSticker('crybaby')">
-                            <img class="sticker" src="/img/crybaby.png" />
+                        <button
+                            class="sticker"
+                            :class="{
+                                active: reaction.sticker === 'crybaby',
+                            }"
+                            @click="pickSticker('crybaby')"
+                        >
+                            <div>
+                                <img src="/img/crybaby.png" />
+                            </div>
                         </button>
-                        <button @click="pickSticker('shaky')">
-                            <img class="sticker" src="/img/shaky.png" />
+                        <button
+                            class="sticker"
+                            :class="{
+                                active: reaction.sticker === 'shaky',
+                            }"
+                            @click="pickSticker('shaky')"
+                        >
+                            <div>
+                                <img src="/img/shaky.png" />
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -205,15 +229,29 @@ textarea {
     font-size: 1rem;
 }
 
-.sticker {
+.sticker img {
     width: 72px;
     height: auto;
+}
+
+.sticker {
     animation: spring 1s ease-out forwards;
+}
+
+.sticker div {
+    transition: transform 0.2s ease-out;
+}
+
+.sticker.active div {
+    transform: scale(1.2);
+}
+
+.sticker.active img {
+    animation: jiggle 0.5s infinite;
 }
 
 .nav-panel__page {
     max-width: 64px;
-
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -357,70 +395,4 @@ button {
     visibility: visible;
     transform: translate(0);
 }
-
-/* .tool-panel {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-
-    z-index: 1500;
-}
-
-.tool-panel__comment {
-    background-color: #f1f1f1;
-    border-radius: 8px;
-    box-shadow: 0px 2px 10px #f1f1f120;
-    width: 100%;
-    height: auto;
-}
-
-.tool-panel__comment textarea {
-    width: 100%;
-    min-height: 48px;
-    height: 100%;
-    resize: none;
-    border-radius: 8px;
-    background: none;
-    outline: none;
-    padding: 5px;
-    border: none;
-}
-.tool-panel__comment div {
-    width: 100%;
-    min-height: 48px;
-    padding: 5px;
-}
-
-.tool-panel__bar {
-    display: flex;
-    gap: 10px;
-    flex-direction: row;
-}
-
-.tool-panel__main {
-    flex-grow: 1;
-    background-color: #f1f1f1;
-    border-radius: 8px;
-    display: grid;
-    pointer-events: auto;
-    box-shadow: 0px 2px 10px #f1f1f120;
-    height: 48px;
-    margin-top: 10px;
-}
-
-.tool-panel__close {
-    background-color: #f1f1f1;
-    border-radius: 8px;
-    pointer-events: auto;
-    cursor: pointer;
-    color: #353535;
-    box-shadow: 0px 2px 10px #f1f1f120;
-    height: 48px;
-    width: 48px;
-    margin-top: 10px;
-    font-size: 1.6rem;
-    outline: none;
-    border: none;
-} */
 </style>
