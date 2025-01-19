@@ -1,5 +1,20 @@
 <template>
-    <div v-if="show || comment" class="reaction-sidebar-wrapper">
+    <div :class="{ open: show && mode === 'sidebar' }" class="reaction-sidebar">
+        <div class="reaction-sidebar__header">
+            <h3 class="caption">Реакции</h3>
+            <button class="close1-button" @click="closeSidebar">
+                <BootstrapIcon name="x-lg" />
+            </button>
+        </div>
+        <div class="reaction-sidebar__inner">
+            <button class="card-btn" @click="next($event)">Оставить</button>
+        </div>
+    </div>
+    <div
+        :class="{ upper: mode === 'textarea' }"
+        class="reaction-sidebar-wrapper"
+        v-if="show || comment"
+    >
         <Transition name="fade">
             <div
                 v-if="mode !== 'sticker'"
@@ -7,25 +22,11 @@
                 @click="closeSidebar"
             ></div>
         </Transition>
-        <div
-            :class="{ open: show && mode === 'sidebar' }"
-            class="reaction-sidebar"
-        >
-            <div class="reaction-sidebar__header">
-                <h3 class="caption">Реакции</h3>
-                <button class="close1-button" @click="closeSidebar">
-                    <BootstrapIcon name="x-lg" />
-                </button>
-            </div>
-            <div class="reaction-sidebar__inner">
-                <button class="card-btn" @click="next($event)">Оставить</button>
-            </div>
-        </div>
         <Transition name="fade">
             <div
                 class="nav-panel"
                 :class="{ upper: mode === 'textarea' }"
-                v-if="mode !== 'sidebar' || comment"
+                v-if="(show && mode !== 'sidebar') || comment"
             >
                 <div v-if="comment" class="comment">
                     {{ modelValue.comment }}
@@ -34,6 +35,8 @@
                     <textarea
                         v-if="mode === 'textarea' && !comment"
                         @input="reaction.comment = $event.target.value"
+                        @focus="focused = true"
+                        @blur="focused = false"
                         ref="textarea"
                         placeholder="Напишите что-нибудь... (необязательно)"
                     ></textarea>
@@ -128,25 +131,29 @@ const emit = defineEmits(['close', 'update:modelValue', 'created']);
 <style scoped>
 .reaction-sidebar-wrapper {
     position: fixed;
-    z-index: 3000;
-    height: 100vh;
-    width: 100vw;
+    overflow-y: auto;
+    z-index: 4000;
     top: 0;
     left: 0;
+    height: 100%;
+    width: 100vw;
+    padding: 20px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 20px;
-    overflow-y: auto;
     pointer-events: none;
 }
 
+.reaction-sidebar-wrapper.upper {
+    justify-content: flex-start;
+}
+
 .nav-panel {
-    z-index: 5000;
+    z-index: 2000;
     background-color: #1c1c1e;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    scroll-margin-bottom: 200px;
 }
 
 .nav-panel__settings {
@@ -331,7 +338,7 @@ button {
     opacity: 0;
     max-width: 100%;
     max-height: 100%;
-    z-index: 2000;
+    z-index: 5000;
     pointer-events: all;
     user-select: none;
     display: flex;

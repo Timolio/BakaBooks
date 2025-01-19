@@ -23,4 +23,8 @@ export default defineNuxtConfig({
     },
 
     modules: ['@pinia/nuxt', '@vueuse/nuxt', 'nuxt-bootstrap-icons'],
+
+    devServer: {
+        host: "nuxt --hostname '0' --port 8000",
+    },
 });
