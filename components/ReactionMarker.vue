@@ -47,7 +47,7 @@ const markerStyle = computed(() => {
 
 .reaction-marker img {
     display: block;
-    width: 80px;
+    width: 64px;
     height: auto;
 }
 </style>

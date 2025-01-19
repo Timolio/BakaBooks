@@ -103,14 +103,15 @@ const next = event => {
     if (mode.value === 'sidebar') {
         mode.value = 'textarea';
         event.preventDefault();
-        // nextTick(() => {
-        //     textarea.value?.focus();
-        // });
+        nextTick(() => {
+            textarea.value?.focus();
+        });
     } else if (mode.value === 'textarea') {
         mode.value = 'sticker';
     } else if (mode.value === 'sticker') {
         if (reaction.value.sticker === null) return;
         emit('created', reaction.value);
+        closeSidebar();
     }
 };
 
@@ -189,7 +190,7 @@ textarea {
     resize: none;
     border: none;
     border-radius: 8px;
-    min-height: 80px;
+    min-height: 100px;
     width: 100%;
     padding: 10px;
     color: #f1f1f1;
@@ -205,7 +206,7 @@ textarea {
 }
 
 .sticker {
-    width: 64px;
+    width: 72px;
     height: auto;
     animation: spring 1s ease-out forwards;
 }
