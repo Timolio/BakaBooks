@@ -28,9 +28,3 @@ useHead({
         </ClientOnly>
     </main>
 </template>
-
-<style>
-main {
-    overflow: hidden;
-}
-</style>
