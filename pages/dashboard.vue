@@ -106,7 +106,7 @@ onMounted(async () => {
 }
 
 .info-item .info {
-    padding: 12px 12px 12px 16px;
+    padding: 12px 12px 12px 18px;
     margin: 4px;
     position: absolute;
     display: flex;
@@ -123,7 +123,7 @@ onMounted(async () => {
 
 .info h2 {
     font-weight: 400;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #f1f1f1;
     max-width: 100%;
     overflow: hidden;
@@ -151,7 +151,7 @@ onMounted(async () => {
     color: var(--accent-color);
     border: none;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
     text-align: left;
 }
 
