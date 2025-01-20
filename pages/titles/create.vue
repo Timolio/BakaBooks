@@ -6,6 +6,7 @@
             </div>
         </div>
         <Field v-model="title" label="Название тайтла" />
+        <Dropdown :options="dropdownOptions" v-model="selectedValue" />
         <button @click="createTitle" class="card-btn">Создать тайтл</button>
     </div>
     <BackButton @click="goBack" />
@@ -16,6 +17,12 @@ const { useWebApp, BackButton } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
 
 const chapterStore = useChapterStore();
+const selectedValue = ref(null);
+const dropdownOptions = [
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+];
 
 const title = ref('');
 
