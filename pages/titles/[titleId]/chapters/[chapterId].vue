@@ -20,14 +20,6 @@
             class="reader-container"
             @scroll="onScroll"
         >
-            <ReactionOverlay
-                :show="true"
-                :active-block-rect="activeBlockRect"
-                @open="openReaction"
-                @click="onLongPress($event)"
-                @touch="onLongPress($event)"
-            />
-
             <div
                 class="feed"
                 v-if="mode === 'feed' && currentChapter?.contentBlocks"
@@ -75,29 +67,14 @@
             </div>
         </simplebar>
     </div>
-    <!-- Пикер реакций -->
-    <ReactionPicker
-        :show="showReactionOverlay"
-        :pickerX="pickerX"
-        :pickerY="pickerY"
-        :sample="reactionSample"
-    />
 
     <ReaderSidebar
         :show="showSidebar"
         @close="showSidebar = false"
         @tool-click="handleToolClick"
     />
-    <ReactionSidebar
-        @close="closeReactionSidebar"
-        :show="showReactionOverlay"
-        v-model="reactionSample"
-        @created="handleReaction"
-        :comment="showComment"
-        :reactions="activeBlockRect"
-    />
     <ReaderToolbar
-        :show="showUI && !showReactionOverlay"
+        :show="showUI"
         :tools="tools"
         :current="currentPage"
         :total="totalPages"
@@ -132,70 +109,19 @@ const chapterStore = useChapterStore();
 const { isOwner, title, currentTitleChapters, currentIndex, currentChapter } =
     storeToRefs(chapterStore);
 
-const reactionStore = useReactionStore();
-const { reactionsMap } = storeToRefs(reactionStore);
-
 const currentPage = ref(0);
 const imageRefs = ref([]);
 const currentImageRef = ref(null);
 const feedContainer = ref(null);
 
 const showUI = ref(true);
-const showReactionPicker = ref(false);
-const showReactionOverlay = ref(false);
 const fullScreen = ref(false);
 const showSidebar = ref(false);
-
-const activeBlockRect = ref({ x: 0, y: 0, width: 0, height: 0 });
-
-const pickerX = ref(0);
-const pickerY = ref(0);
-const currentX = ref(0);
-const currentY = ref(0);
 
 const tools = ref([]);
 
 const imageUploader = ref(null);
 const uploading = ref(false);
-const reactionSample = ref({
-    sticker: null,
-    comment: null,
-});
-const showComment = ref(false);
-
-const closeReactionSidebar = () => {
-    showComment.value = false;
-    showReactionOverlay.value = false;
-};
-
-const getTop = el =>
-    el.offsetTop + (el.offsetParent && getTop(el.offsetParent));
-
-const setActiveBlock = async index => {
-    const block = currentChapter.value?.contentBlocks[index];
-    if (!block) return;
-    if (!reactionsMap.value[block?._id]) {
-        await reactionStore.fetchReactions(chapterId, block?._id);
-    }
-
-    let el;
-    if (mode.value === 'feed') {
-        el = imageRefs.value[index];
-    } else {
-        el = currentImageRef.value;
-    }
-
-    if (!el) return;
-    await nextTick(() => {
-        activeBlockRect.value = {
-            reactions: reactionsMap.value[block?._id],
-            x: el.offsetLeft,
-            y: getTop(el),
-            width: el.scrollWidth,
-            height: el.scrollHeight,
-        };
-    });
-};
 
 const upload = imageUrl => {
     if (imageUrl) {
@@ -206,12 +132,6 @@ const upload = imageUrl => {
         scrollToPage(length - 1, true);
     }
     uploading.value = false;
-};
-
-const openReaction = reaction => {
-    if (showReactionOverlay.value) return;
-    reactionSample.value = reaction;
-    showComment.value = true;
 };
 
 onMounted(async () => {
@@ -253,25 +173,6 @@ watch(currentPage, async newVal => {
 });
 
 /* -----------------------------
-     Обработка добавления реакций
------------------------------ */
-async function handleReaction(reaction) {
-    if (!blockId.value) return;
-    const newReaction = {
-        chapterId,
-        blockId: blockId.value,
-        type: reaction.sticker,
-        content: reaction.comment,
-        x: currentX.value,
-        y: currentY.value,
-        authorId: initDataUnsafe?.user?.id || 404,
-    };
-    await reactionStore.addReaction(newReaction);
-
-    showReactionPicker.value = false;
-}
-
-/* -----------------------------
      Скрыть/показать UI
 ----------------------------- */
 function toggleUI() {
@@ -282,8 +183,6 @@ function toggleUI() {
      Логика листания/тапов
 ----------------------------- */
 function onPageClick(event) {
-    if (showReactionOverlay.value) return;
-
     const screenWidth = window.innerWidth;
     const thirdWidth = screenWidth / 3;
 
@@ -299,36 +198,6 @@ function onPageClick(event) {
     }
 }
 
-function onLongPress(event) {
-    console.log('aboba');
-    if (!showReactionOverlay.value) return;
-    let clientX, clientY;
-    if (event.touches && event.touches.length > 0) {
-        clientX = event.touches[0].clientX;
-        clientY = event.touches[0].clientY;
-    } else {
-        clientX = event.clientX;
-        clientY = event.clientY;
-    }
-
-    const el = document.getElementById(`${currentPage.value}`);
-    if (!el) return;
-
-    const rect = el.getBoundingClientRect();
-    currentX.value = ((clientX - rect.left) / rect.width) * 100;
-    currentY.value = ((clientY - rect.top) / rect.height) * 100;
-
-    pickerX.value = clientX;
-    pickerY.value = clientY;
-    showReactionPicker.value = true;
-    console.log(
-        showReactionPicker.value,
-        pickerX.value,
-        pickerY.value,
-        reactionSample.value
-    );
-}
-
 /* -----------------------------
      Скролл в режиме «лента»
 ----------------------------- */
@@ -337,7 +206,6 @@ function onScroll() {
     if (!feedContainer.value) return;
 
     showUI.value = false;
-    showReactionPicker.value = false;
 
     const scrollableElement = feedContainer.value.$el.querySelector(
         '.simplebar-content-wrapper'
@@ -408,7 +276,6 @@ watchEffect(() => {
                 disabled: currentIndex.value === 0,
             },
             { name: 'settings', icon: 'gear' },
-            { name: 'chat', icon: 'chat-heart' },
             isOwner.value && { name: 'edit', icon: 'pencil' },
             {
                 name: 'next',
@@ -472,9 +339,6 @@ const handleToolClick = async tool => {
             const encoded = Buffer.from(jsonString).toString('base64');
             const link = `https://t.me/${config.BOT_ID}/start?startapp=${encoded}`;
             navigator.clipboard.writeText(link);
-            break;
-        case 'chat':
-            showReactionOverlay.value = !showReactionOverlay.value;
             break;
         case 'fullscreen':
             const el = document.documentElement;

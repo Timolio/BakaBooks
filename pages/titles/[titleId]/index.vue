@@ -83,7 +83,7 @@ h1 {
 }
 
 h3 {
-    margin-top: 0 !important;
+    margin-top: 1px !important;
 }
 
 .creation {
