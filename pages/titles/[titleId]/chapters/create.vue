@@ -7,7 +7,7 @@
         </div>
         <Field v-model="titleName" label="Название главы" />
         <Field v-model="number" type="number" label="Номер главы" />
-        <button @click="createChapter" class="card-btn">Создать главу</button>
+        <button @click="createChapter" class="create-btn">Создать главу</button>
     </div>
     <BackButton @click="goBack" />
 </template>

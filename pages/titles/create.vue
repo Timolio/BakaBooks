@@ -6,28 +6,44 @@
             </div>
         </div>
         <Field v-model="title" label="Название тайтла" />
-        <Dropdown :options="dropdownOptions" v-model="selectedValue" />
-        <button @click="createTitle" class="card-btn">Создать тайтл</button>
+        <Dropdown
+            :options="user?.channels"
+            v-model="selectedValue"
+            label-property="title"
+            value-property="_id"
+            label="Опубликовать от лица"
+        />
+        <div class="field">
+            <h2>Создать команду</h2>
+            <button @click="inviteBot">Создать команду</button>
+        </div>
+        <button @click="createTitle" class="create-btn">Создать тайтл</button>
     </div>
     <BackButton @click="goBack" />
 </template>
 
 <script setup>
-const { useWebApp, BackButton } = await import('vue-tg');
+const { useWebApp, BackButton, useWebAppNavigation } = await import('vue-tg');
 const { initDataUnsafe } = useWebApp();
+const { openTelegramLink } = useWebAppNavigation();
 
 const chapterStore = useChapterStore();
+const userStore = useUserStore();
+const { user } = storeToRefs(userStore);
 const selectedValue = ref(null);
-const dropdownOptions = [
-    { label: 'Option 1', value: 'option1' },
-    { label: 'Option 2', value: 'option2' },
-    { label: 'Option 3', value: 'option3' },
-];
+
+const config = useRuntimeConfig();
 
 const title = ref('');
 
 const goBack = async () => {
     await navigateTo('/dashboard');
+};
+
+const inviteBot = () => {
+    const rights = 'invite_users+manage_chat';
+    const inviteLink = `https://t.me/${config.public.BOT_ID}?startchannel&admin=${rights}`;
+    openTelegramLink(inviteLink);
 };
 
 const createTitle = async () => {
@@ -37,6 +53,10 @@ const createTitle = async () => {
     });
     await navigateTo(`/titles/${titleId}`);
 };
+
+onMounted(async () => {
+    await userStore.fetchUser(initDataUnsafe?.user?.id || 898654264);
+});
 </script>
 
 <style scoped>

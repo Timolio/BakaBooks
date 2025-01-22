@@ -46,11 +46,8 @@
 const { useWebApp, useWebAppNavigation } = await import('vue-tg');
 const chapterStore = useChapterStore();
 const { initDataUnsafe } = useWebApp();
-const { openTelegramLink } = useWebAppNavigation();
 
 const { titles, title, currentTitleChapters } = storeToRefs(chapterStore);
-
-const config = useRuntimeConfig();
 
 const openTitle = async titleId => {
     if (title.value?._id !== titleId) {
@@ -58,12 +55,6 @@ const openTitle = async titleId => {
         currentTitleChapters.value = null;
     }
     await navigateTo(`/titles/${titleId}`);
-};
-
-const inviteBot = () => {
-    const rights = 'invite_users+manage_chat';
-    const inviteLink = `https://t.me/${config.public.BOT_ID}?startchannel&admin=${rights}`;
-    openTelegramLink(inviteLink);
 };
 
 onMounted(async () => {
